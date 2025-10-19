@@ -280,9 +280,9 @@ class CaloriasProvider extends ChangeNotifier {
 
   void teste() {
     _calModel = CaloriasModel.fromJson(
-      caloriasTotais: _caloriasTotais!,
+      caloriasTotais: _caloriasTotais ?? 0,
       caloriasConsumidas: _caloriasConsumidas,
-      taxaMetabolismoBasal: _valorTMB!,
+      taxaMetabolismoBasal: _valorTMB ?? 0,
     );
     notifyListeners();
   }
