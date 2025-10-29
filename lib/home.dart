@@ -1,5 +1,6 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/views/calcular_calorias_view.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/views/chat_refeicoes_view.dart';
@@ -27,8 +28,30 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    debugPrint('test');
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       lerRefeicao();
+
+      final provider2 = Provider.of<AuthProvider>(context, listen: false);
+      debugPrint(
+        'calorias consumidas pelo usuario: ${provider2.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
+      );
+      context.read<CaloriasProvider>().setCaloriasConsumidas(
+        caloriasConsumidas: provider2
+            .authModel
+            ?.authUserModel
+            ?.caloriasModel
+            ?.caloriasConsumidas,
+        caloriasTotais:
+            provider2.authModel?.authUserModel?.caloriasModel?.caloriasTotais,
+      );
+      debugPrint(
+        'calorias provider: ${context.read<CaloriasProvider>().caloriasConsumidas.toString()}',
+      );
+      debugPrint(
+        'calorias provider: ${context.read<CaloriasProvider>().caloriasTotais.toString()}',
+      );
+      await context.read<CaloriasProvider>().calcularPorcentagem();
     });
   }
 
@@ -125,10 +148,7 @@ class _HomeState extends State<Home> {
         currentIndex: indiceAtual,
         onTap: (value) async {
           if (value == 2) {
-            final chatProvider = Provider.of<ChatProvider>(
-              context,
-              listen: false,
-            );
+            final chatProvider = context.read<ChatProvider>();
             chatProvider.obterRefeicoesCache();
           }
           setState(() {

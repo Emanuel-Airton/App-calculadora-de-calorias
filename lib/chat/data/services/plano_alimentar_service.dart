@@ -1,28 +1,62 @@
 import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class PlanoAlimentarService {
-  final Box<PlanoAlimentar> box;
+  //final Box<PlanoAlimentar> box;
+  final planoBox = Hive.box<PlanoAlimentar>('planoAlimentarBox');
 
-  PlanoAlimentarService(this.box);
+  //  PlanoAlimentarService(this.box);
 
   // Salvar plano alimentar
   Future<void> salvarPlano(PlanoAlimentar plano) async {
-    await box.put('plano_alimentar', plano);
+    await planoBox.put('plano_alimentar', plano);
+  }
+
+  Future<void> atualizarPlano({
+    String? nomeRefeicao,
+    required bool valor,
+    //required int caloriasConsumidas
+  }) async {
+    final plano = obterPlano();
+    if (plano != null) {
+      for (var element in plano.listRefeicao!) {
+        if (element.nomeRefeicao == nomeRefeicao) {
+          element.refeicaoFeita = valor;
+          debugPrint('refeição encontrada');
+
+          debugPrint(element.toMap().toString());
+          plano.save();
+        }
+      }
+    }
+  }
+
+  Future<void> resetRefeicoesPlano() async {
+    final plano = obterPlano();
+    if (plano?.listRefeicao != null) {
+      for (var element in plano!.listRefeicao!) {
+        element.refeicaoFeita = false;
+        debugPrint('refeiçoes resetadas');
+
+        debugPrint(element.toMap().toString());
+        plano.save();
+      }
+    }
   }
 
   // Obter plano alimentar
   PlanoAlimentar? obterPlano() {
-    return box.get('plano_alimentar');
+    return planoBox.get('plano_alimentar');
   }
 
   // Verificar se existe plano salvo
   bool existePlano() {
-    return box.containsKey('plano_alimentar');
+    return planoBox.containsKey('plano_alimentar');
   }
 
   // Remover plano
   Future<void> removerPlano() async {
-    await box.delete('plano_alimentar');
+    await planoBox.delete('plano_alimentar');
   }
 }

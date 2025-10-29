@@ -43,7 +43,7 @@ class AuthModel {
 }
 
 @HiveType(typeId: 2)
-class AuthUserModel {
+class AuthUserModel extends HiveObject {
   @HiveField(0)
   String? genero;
 

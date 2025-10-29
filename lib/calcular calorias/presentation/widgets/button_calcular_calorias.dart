@@ -27,10 +27,10 @@ class ButtonCalcularCalorias extends StatelessWidget {
           listen: false,
         );
 
-        final provider = context.read<CaloriasProvider>();
+        final caloriasProvider = context.read<CaloriasProvider>();
         if (formkey.currentState!.validate()) {
           if (userProfileprovider.hasCompleteProfile) {
-            final Result result = await provider.calcularTMB(
+            final Result result = await caloriasProvider.calcularTMB(
               altura: userProfileprovider
                   .authProvider
                   .authModel!
@@ -63,23 +63,25 @@ class ButtonCalcularCalorias extends StatelessWidget {
                   .objetivo!,
             );
             if (result is Ok) {
-              debugPrint('Valor calculado? ${provider.isCalculate.toString()}');
+              debugPrint(
+                'Valor calculado? ${caloriasProvider.isCalculate.toString()}',
+              );
               _mostrarResultadoDialog(
                 context,
-                provider.caloriasModel?.caloriasTotais ?? 0,
+                caloriasProvider.caloriasModel?.caloriasTotais ?? 0,
               );
               userProfileprovider
                       .authProvider
                       .authModel
                       ?.authUserModel
                       ?.macronutrientesDiarios =
-                  provider.macronutrientesModel;
+                  caloriasProvider.macronutrientesModel;
               userProfileprovider
                       .authProvider
                       .authModel
                       ?.authUserModel
                       ?.caloriasModel =
-                  provider.caloriasModel;
+                  caloriasProvider.caloriasModel;
               //provider.authUserModel.macronutrientesDiarios?.calorias = provider.caloriasTotais;
               debugPrint(
                 'objetivo: ${userProfileprovider.objetivo.toString()}',

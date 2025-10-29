@@ -153,8 +153,12 @@ class CaloriasProvider extends ChangeNotifier {
     : _calcularCaloriasService =
           calcularCaloriasService ?? CalcularCaloriasService();
 
-  void setCaloriasTotais({required int caloriasTotais}) {
-    _caloriasTotais = caloriasTotais;
+  void setCaloriasConsumidas({
+    required int? caloriasConsumidas,
+    int? caloriasTotais,
+  }) {
+    _caloriasConsumidas = caloriasConsumidas!;
+    _caloriasTotais = caloriasTotais ?? _caloriasTotais;
     notifyListeners();
   }
 
@@ -220,12 +224,12 @@ class CaloriasProvider extends ChangeNotifier {
   }
 
   void alternarRefeicao({
-    required String valor,
+    required String nomeRefeicao,
     required bool iselect,
     required int calorias,
     required int caloriasTotais,
   }) {
-    refeicoesSelecionadas[valor] = iselect;
+    refeicoesSelecionadas[nomeRefeicao] = iselect;
     if (iselect) {
       adicionarCaloriasConsumidas(calorias, caloriasTotais);
     } else {
@@ -258,11 +262,14 @@ class CaloriasProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void calcularPorcentagem() {
+  Future<void> calcularPorcentagem() async {
+    isCalculate = true;
+    notifyListeners();
     debugPrint(_caloriasTotais.toString());
     final calcular = ((_caloriasConsumidas / _caloriasTotais!) * 100)
         .roundToDouble();
     _porcentagem = calcular / 100;
+    isCalculate = false;
     notifyListeners();
   }
 

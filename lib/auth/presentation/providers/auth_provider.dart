@@ -21,7 +21,7 @@ class AuthProvider extends ChangeNotifier {
     _listen();
   }
 
-  _listen() {
+  void _listen() {
     _authSubscription = _googleAuthService.listenAuth().listen((event) {
       //  _user = event;
       _authModel = AuthModel(
@@ -80,6 +80,7 @@ class UserProfileProvider extends ChangeNotifier {
   }) : authLocalSourceService =
            authLocalSource ?? AuthLocalSourceService(Hive.box('userProfile')) {
     lerAuth();
+    //_authProvider.authModel?.userEmail = 'novoEmail';
     debugPrint('email ${_authProvider.authModel?.userEmail.toString()}');
   }
 
@@ -97,6 +98,7 @@ class UserProfileProvider extends ChangeNotifier {
     int? idade,
     String? nivelAtividade,
     String? objetivo,
+    int? caloriasConsumidas,
   }) {
     //   _authProvider._authModel?.authUserModel ??= AuthUserModel.dados();
     // final authUserModel = _authProvider._authModel!.authUserModel!;
@@ -114,9 +116,22 @@ class UserProfileProvider extends ChangeNotifier {
         _authProvider.authModel?.authUserModel?.nivelAtividade;
     _authProvider._authModel?.authUserModel?.objetivo =
         objetivo ?? _authProvider._authModel?.authUserModel?.objetivo;
+    _authProvider._authModel?.authUserModel?.caloriasModel?.caloriasConsumidas =
+        caloriasConsumidas ??
+        _authProvider
+            ._authModel
+            ?.authUserModel
+            ?.caloriasModel
+            ?.caloriasConsumidas;
     debugPrint(
       'testando ${_authProvider._authModel?.authUserModel?.idade.toString()}',
     );
+    if (caloriasConsumidas != null) {
+      debugPrint('Contém calorias');
+      authLocalSourceService.atualizarCaloriasPlano(
+        caloriasConsumidas: caloriasConsumidas,
+      );
+    }
     notifyListeners();
   }
 
@@ -152,11 +167,7 @@ class UserProfileProvider extends ChangeNotifier {
         authLocalSourceService.obterPlano() ??
         authProvider._authModel!.authUserModel;
     debugPrint(
-      authProvider
-          ._authModel
-          ?.authUserModel
-          ?.macronutrientesDiarios
-          ?.carboidratos
+      authProvider._authModel?.authUserModel?.caloriasModel?.caloriasConsumidas
           .toString(),
     );
     debugPrint(authProvider._authModel?.toJson().toString());

@@ -1,9 +1,7 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
 import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
-import 'package:app_calorias_diarias/chat/domain/models/refeicao_model.dart';
 import 'package:app_calorias_diarias/home.dart';
-import 'package:app_calorias_diarias/mostrar%20calorias/presentation/views/mostrar_calorias_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +18,23 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     testarHive();
     super.initState();
+
+    /*debugPrint(
+      'calorias consumidas: ${context.read<UserProfileProvider>().authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
+    );
+    //final caloriasProvider = Provider.of<CaloriasProvider>(context, listen: false);
+    context.read<CaloriasProvider>().setCaloriasConsumidas(
+      caloriasConsumidas: context
+          .read<UserProfileProvider>()
+          .authProvider
+          .authModel
+          ?.authUserModel
+          ?.caloriasModel
+          ?.caloriasConsumidas,
+    );
+    debugPrint(
+      'calorias provider: ${context.read<CaloriasProvider>().caloriasConsumidas.toString()}',
+    );*/
   }
 
   void testarHive() async {
@@ -53,14 +68,13 @@ class _SplashscreenState extends State<Splashscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider2 = Provider.of<AuthProvider>(context, listen: true);
-
+    final provider3 = Provider.of<AuthProvider>(context, listen: false);
     return Material(
       color: Theme.of(context).colorScheme.inversePrimary,
       child: FutureBuilder(
         future: Future.delayed(
           Duration(seconds: 3),
-        ).then((value) => provider2.authModel),
+        ).then((value) => provider3.authModel),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

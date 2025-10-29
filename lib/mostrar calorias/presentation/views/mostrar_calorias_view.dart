@@ -1,8 +1,11 @@
+import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/card_info_calorias.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/checkbox_refeicoes.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/column_macros.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class MostrarCaloriasView extends StatefulWidget {
@@ -15,10 +18,18 @@ class MostrarCaloriasView extends StatefulWidget {
 class _HomepageState extends State<MostrarCaloriasView> {
   Map<int, bool> map = {};
   bool valor = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    //debugPrint('teste');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // final chatprovider = Provider.of<ChatProvider>(context);
+
     debugPrint('reload');
     return Expanded(
       child: Stack(
@@ -79,32 +90,38 @@ class _HomepageState extends State<MostrarCaloriasView> {
                             return Center(child: Text('Erro'));
                           }
                           if (snapshot.hasData) {
-                            final data = snapshot.data!.listRefeicao;
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: data!.length,
-                              itemBuilder: (context, index) {
-                                final item = snapshot
-                                    .data!
-                                    .listRefeicao![index]
-                                    .nomeRefeicao;
-                                //if (map.isEmpty) {
-                                map.addAll({index: valor});
-                                final calorias = snapshot
-                                    .data!
-                                    .listRefeicao![index]
-                                    .macros!['calorias'];
-                                // debugPrint('map: ${map.toString()}');
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: CheckboxRefeicoes(
-                                    item: item,
-                                    valor: map[index],
-                                    calorias: calorias,
-                                  ),
-                                );
-                              },
-                            );
+                            final data = snapshot.data?.listRefeicao;
+                            if (data != null) {
+                              List<int> list = [];
+                              return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  final item =
+                                      snapshot.data?.listRefeicao?[index];
+                                  debugPrint('testando');
+                                  debugPrint(item?.refeicaoFeita.toString());
+
+                                  //if (map.isEmpty) {
+
+                                  map.addAll({
+                                    index:
+                                        //valor,
+                                        ?item?.refeicaoFeita,
+                                  });
+                                  final calorias = item?.macros!['calorias'];
+                                  //debugPrint('map: ${map.toString()}');
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: CheckboxRefeicoes(
+                                      item: item?.nomeRefeicao,
+                                      valor: map[index],
+                                      calorias: calorias,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
                           }
                       }
                       return Container();

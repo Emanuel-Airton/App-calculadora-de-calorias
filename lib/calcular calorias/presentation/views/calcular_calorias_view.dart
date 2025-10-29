@@ -1,3 +1,4 @@
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/button_calcular_calorias.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/dropdownButtom_genero.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/dropdownButtom_nivelAtividade.dart';
@@ -5,7 +6,9 @@ import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/te
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/textfield_idade.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/textfield_peso.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/tougleButton_objetivo.dart';
+import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CalcularCaloriasView extends StatefulWidget {
   const CalcularCaloriasView({super.key});
@@ -304,6 +307,10 @@ class _CalcularCaloriasViewState extends State<CalcularCaloriasView> {
                           TouglebuttonObjetivo(),
                           SizedBox(height: 15),
                           ButtonCalcularCalorias(formkey: _key),
+                          ElevatedButton(
+                            onPressed: () async {},
+                            child: Text('resetar refeições'),
+                          ),
                         ],
                       ),
                     ),

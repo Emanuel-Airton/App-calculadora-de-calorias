@@ -10,6 +10,12 @@ class AuthLocalSourceService {
     await box.put('user_profile', user);
   }
 
+  Future<void> atualizarCaloriasPlano({int? caloriasConsumidas}) async {
+    final authUserModel = obterPlano();
+    authUserModel?.caloriasModel?.caloriasConsumidas = caloriasConsumidas;
+    authUserModel?.save();
+  }
+
   AuthUserModel? obterPlano() {
     return box.get('user_profile');
   }

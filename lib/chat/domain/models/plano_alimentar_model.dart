@@ -2,7 +2,7 @@ import 'package:app_calorias_diarias/chat/domain/models/refeicao_model.dart';
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 2)
-class PlanoAlimentar {
+class PlanoAlimentar extends HiveObject {
   @HiveField(0)
   List<RefeicaoModel>? listRefeicao;
 

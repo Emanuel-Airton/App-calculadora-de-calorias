@@ -45,15 +45,22 @@ import 'package:hive/hive.dart';
   }
 }*/
 
-class ChatRepositorie {
-  // ChatCacheService cacheService = ChatCacheService();
+class ChatRepository {
+  final PlanoAlimentarService _planoService;
+  final ChatService _chatService;
+
+  ChatRepository({
+    required PlanoAlimentarService planoService,
+    required ChatService chatService,
+  }) : _planoService = planoService,
+       _chatService = chatService;
+
   final planoBox = Hive.box<PlanoAlimentar>('planoAlimentarBox');
 
-  ChatService chatService = ChatService();
   final chaveCache = 'refeições';
 
   int? verificarTempoUltimaRequisicao() {
-    return chatService.verificarTempoUltimaRequisicao();
+    return _chatService.verificarTempoUltimaRequisicao();
   }
 
   Stream<PlanoAlimentar> gerarPlanoAlimentar(
@@ -62,7 +69,7 @@ class ChatRepositorie {
   ) async* {
     try {
       String accumulatedJson = '';
-      await for (final chunk in chatService.generateMealPlanStream(
+      await for (final chunk in _chatService.generateMealPlanStream(
         macroNutrientes,
         objetivo,
       )) {
@@ -72,16 +79,11 @@ class ChatRepositorie {
         if (plano != null) {
           yield plano;
           await limparCache();
-          await PlanoAlimentarService(planoBox).salvarPlano(plano);
+          //  await PlanoAlimentarService(planoBox).salvarPlano(plano);
+          await _planoService.salvarPlano(plano);
           //  cacheService.salvarCache('refeições', plano);
         }
       }
-      /*  chatService.generateMealPlanStream(macroNutrientes, objetivo).listen((
-        event,
-      ) {
-        accumulatedJson = event;
-      });
-      yield accumulatedJson;*/
     } catch (e) {
       rethrow;
     }
@@ -102,47 +104,15 @@ class ChatRepositorie {
       return null; // JSON ainda incompleto
     }
   }
-  /*  Future<PlanoAlimentar?> gerarRefeicoes(
-    MacronutrientesModel chatModel,
-    String objetivo,
-  ) async {
-    try {
-      // Primeiro tenta fazer a requisição da API
-
-      debugPrint('objetivo: $objetivo');
-      final request = await chatService.retryrequestApi(chatModel, objetivo);
-
-      // Se a requisição foi bem sucedida, salva no cache
-      if (request!.listRefeicao != null && request.listRefeicao!.isNotEmpty) {
-        await PlanoAlimentarService(planoBox).salvarPlano(request);
-        debugPrint('Plano salvo no cache com sucesso!');
-      }
-      return request;
-    } catch (e) {
-      // Se der erro na API, tenta buscar do cache
-      debugPrint('objetivo nulo: $objetivo');
-      debugPrint('Erro na API, tentando cache: $e');
-      final cache = await lerRefeicoesCache();
-      if (cache != null) {
-        debugPrint('Usando dados do cache');
-        return cache;
-      }
-      rethrow;
-    }
-  }*/
-
-  /* Stream<String?> gerar(MacronutrientesModel macros, String objetivo) {
-    try {
-      Stream<String?> stream = chatService.requestApi(macros, objetivo);
-      return stream;
-    } catch (e) {
-      rethrow;
-    }
-  }*/
 
   Future<PlanoAlimentar?> lerRefeicoesCache() async {
     try {
-      final lerCache = PlanoAlimentarService(planoBox).obterPlano();
+      // final lerCache = PlanoAlimentarService(planoBox).obterPlano();
+      final lerCache = _planoService.obterPlano();
+
+      /*    PlanoAlimentarService(
+        planoBox,
+      ).atualizarPlano(plano: lerCache!, nomeRefeicao: 'Lanche da tarde');*/
 
       if (lerCache != null &&
           lerCache.listRefeicao != null &&
@@ -150,6 +120,7 @@ class ChatRepositorie {
         debugPrint(
           'Cache encontrado: ${lerCache.listRefeicao!.length} refeições',
         );
+
         return lerCache;
       } else {
         debugPrint('Cache vazio ou inválido');
@@ -161,7 +132,23 @@ class ChatRepositorie {
     }
   }
 
+  Future<void> atualizarPlano({
+    required String nomeRefeicao,
+    required bool valor,
+  }) async {
+    //final plano = await lerRefeicoesCache();
+    await _planoService.atualizarPlano(
+      nomeRefeicao: nomeRefeicao,
+      valor: valor,
+    );
+    // await lerRefeicoesCache();
+  }
+
+  Future<void> resetarRefeicoes() async {
+    await _planoService.removerPlano();
+  }
+
   Future<void> limparCache() async {
-    PlanoAlimentarService(planoBox).removerPlano();
+    PlanoAlimentarService().removerPlano();
   }
 }

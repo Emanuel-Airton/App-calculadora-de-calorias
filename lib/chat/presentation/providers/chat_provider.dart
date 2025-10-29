@@ -5,7 +5,7 @@ import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.da
 import 'package:flutter/widgets.dart';
 
 class ChatProvider extends ChangeNotifier {
-  ChatRepositorie chatRepositorie;
+  ChatRepository _chatRepository;
   Future<PlanoAlimentar?>? _valorCache;
   Future<PlanoAlimentar?>? get valorCache => _valorCache;
 
@@ -32,13 +32,13 @@ class ChatProvider extends ChangeNotifier {
   int? _tempoProximaRequisicao;
   int? get tempoProximaRequisicao => _tempoProximaRequisicao;
 
-  ChatProvider({ChatRepositorie? chatRepositorie})
-    : chatRepositorie = chatRepositorie ?? ChatRepositorie() {
+  ChatProvider({required ChatRepository chatRepository})
+    : _chatRepository = chatRepository {
     lerRefeicaoCache();
   }
 
   int? verificarUltimaRequisicao() {
-    _tempoProximaRequisicao = chatRepositorie.verificarTempoUltimaRequisicao();
+    _tempoProximaRequisicao = _chatRepository.verificarTempoUltimaRequisicao();
     notifyListeners();
     return null;
   }
@@ -53,7 +53,7 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
     // Transforma o stream de String em stream de PlanoAlimentar
 
-    _currentStream = chatRepositorie
+    _currentStream = _chatRepository
         .gerarPlanoAlimentar(macroNutrientes, objetivo)
         .asBroadcastStream()
         .transform(
@@ -120,8 +120,28 @@ class ChatProvider extends ChangeNotifier {
   }
 
   Future<void> lerRefeicaoCache() async {
-    _planoAtual = await chatRepositorie.lerRefeicoesCache();
+    _planoAtual = await _chatRepository.lerRefeicoesCache();
     _respostaFinalizada = true;
+    notifyListeners();
+  }
+
+  Future<void> atualizarRefeicao({
+    required PlanoAlimentar planoAlimentar,
+    required String nomeRefeicao,
+    required valor,
+  }) async {
+    if (_planoAtual != null) {
+      await _chatRepository.atualizarPlano(
+        nomeRefeicao: nomeRefeicao,
+        valor: valor,
+      );
+      // Recarrega o plano atualizado
+      await lerRefeicaoCache();
+    }
+  }
+
+  Future<void> resetarRefeicoes() async {
+    await _chatRepository.resetarRefeicoes();
     notifyListeners();
   }
 
@@ -194,7 +214,7 @@ class ChatProvider extends ChangeNotifier {
     _carregando = true;
     try {
       // if (_valorCache != null) return;
-      _valorCache = chatRepositorie.lerRefeicoesCache();
+      _valorCache = _chatRepository.lerRefeicoesCache();
       //_carregando = false;
       debugPrint('cache: $_valorCache');
     } catch (e) {
@@ -209,7 +229,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   Future<void> limparCache() async {
-    await chatRepositorie.limparCache();
+    await _chatRepository.limparCache();
   }
 }
 /*

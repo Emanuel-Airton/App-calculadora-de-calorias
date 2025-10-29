@@ -11,7 +11,15 @@ class RefeicaoModel {
   @HiveField(2)
   Map<String, dynamic>? macros;
 
-  RefeicaoModel({this.nomeRefeicao, this.alimentos, this.macros});
+  @HiveField(3)
+  bool? refeicaoFeita = false;
+
+  RefeicaoModel({
+    this.nomeRefeicao,
+    this.alimentos,
+    this.macros,
+    this.refeicaoFeita,
+  });
   factory RefeicaoModel.fromJson(Map<dynamic, dynamic> map) {
     return RefeicaoModel(
       nomeRefeicao: map['refeicao'],
@@ -21,6 +29,7 @@ class RefeicaoModel {
       macros: map['macros'] != null
           ? Map<String, dynamic>.from(map['macros'])
           : null,
+      refeicaoFeita: map['refeicaoFeita'],
     );
   }
 
@@ -42,6 +51,7 @@ class RefeicaoModel {
       'refeicao': nomeRefeicao,
       'alimentos': alimentos?.map((e) => e).toList(),
       'macros': macros,
+      'refeicaoFeita': refeicaoFeita,
     };
   }
 }

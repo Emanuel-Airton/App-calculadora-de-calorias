@@ -184,7 +184,7 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                                         ?.calorias ==
                                     null
                                 ? '--'
-                                : '${provider.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
+                                : '${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
                             style: TextStyle(fontSize: 12),
                           ),
                         ],

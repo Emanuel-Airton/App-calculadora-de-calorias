@@ -31,7 +31,7 @@ class CaloriasModel {
   factory CaloriasModel.fromJson({
     required int caloriasTotais,
     required int caloriasConsumidas,
-    required int taxaMetabolismoBasal,
+    required int? taxaMetabolismoBasal,
   }) {
     return CaloriasModel.dados(
       caloriasTotais: caloriasTotais,
