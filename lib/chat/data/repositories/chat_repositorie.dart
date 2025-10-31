@@ -145,7 +145,7 @@ class ChatRepository {
   }
 
   Future<void> resetarRefeicoes() async {
-    await _planoService.removerPlano();
+    await _planoService.resetRefeicoesPlano();
   }
 
   Future<void> limparCache() async {

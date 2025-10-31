@@ -100,7 +100,7 @@ class _HomepageState extends State<MostrarCaloriasView> {
                                   final item =
                                       snapshot.data?.listRefeicao?[index];
                                   debugPrint('testando');
-                                  debugPrint(item?.refeicaoFeita.toString());
+                                  // debugPrint(item?.refeicaoFeita.toString());
 
                                   //if (map.isEmpty) {
 
@@ -114,7 +114,8 @@ class _HomepageState extends State<MostrarCaloriasView> {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 5),
                                     child: CheckboxRefeicoes(
-                                      item: item?.nomeRefeicao,
+                                      nomeRefeicaoSelecionada:
+                                          item?.nomeRefeicao,
                                       valor: map[index],
                                       calorias: calorias,
                                     ),

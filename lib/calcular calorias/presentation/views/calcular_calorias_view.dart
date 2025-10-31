@@ -1,3 +1,4 @@
+import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/button_calcular_calorias.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/dropdownButtom_genero.dart';
@@ -308,7 +309,17 @@ class _CalcularCaloriasViewState extends State<CalcularCaloriasView> {
                           SizedBox(height: 15),
                           ButtonCalcularCalorias(formkey: _key),
                           ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              context
+                                  .read<CaloriasProvider>()
+                                  .setCaloriasConsumidas(caloriasConsumidas: 0);
+                              await context
+                                  .read<ChatProvider>()
+                                  .resetarRefeicoes();
+                              context.read<UserProfileProvider>().updateProfile(
+                                caloriasConsumidas: 0,
+                              );
+                            },
                             child: Text('resetar refeições'),
                           ),
                         ],

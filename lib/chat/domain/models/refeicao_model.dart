@@ -29,7 +29,7 @@ class RefeicaoModel {
       macros: map['macros'] != null
           ? Map<String, dynamic>.from(map['macros'])
           : null,
-      refeicaoFeita: map['refeicaoFeita'],
+      refeicaoFeita: map['refeicaoFeita'] ?? false,
     );
   }
 

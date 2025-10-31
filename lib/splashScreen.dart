@@ -1,7 +1,10 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
+import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/home.dart';
+import 'package:app_calorias_diarias/verificar%20dia/data/repositories/verifica_dia_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,7 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     testarHive();
     super.initState();
+    verificarDiaAtual();
 
     /*debugPrint(
       'calorias consumidas: ${context.read<UserProfileProvider>().authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
@@ -35,6 +39,26 @@ class _SplashscreenState extends State<Splashscreen> {
     debugPrint(
       'calorias provider: ${context.read<CaloriasProvider>().caloriasConsumidas.toString()}',
     );*/
+  }
+
+  Future<void> verificarDiaAtual() async {
+    final diaRepo = context.read<VerificaDiaRepository>();
+
+    bool isMesmoDia = await diaRepo.verificaDiaIgualAtual();
+    if (isMesmoDia) {
+      debugPrint('dia atual é o mesmo dia salvo');
+    } else {
+      limparDadosDiarios();
+      diaRepo.salvarDiaAtual();
+    }
+  }
+
+  Future<void> limparDadosDiarios() async {
+    context.read<CaloriasProvider>().setCaloriasConsumidas(
+      caloriasConsumidas: 0,
+    );
+    await context.read<ChatProvider>().resetarRefeicoes();
+    context.read<UserProfileProvider>().updateProfile(caloriasConsumidas: 0);
   }
 
   void testarHive() async {

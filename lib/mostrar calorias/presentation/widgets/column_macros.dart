@@ -1,5 +1,4 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
-import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,14 +8,14 @@ class ColumnMacros extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProfileProvider>(
-      builder: (context, value, child) {
+      builder: (context, userProfileProvider, child) {
         return Column(
           children: [
             sizedbox(
               context: context,
               texto: 'Carboidratos',
               macrosRecebidos:
-                  value
+                  userProfileProvider
                       .authProvider
                       .authModel
                       ?.authUserModel
@@ -37,7 +36,7 @@ class ColumnMacros extends StatelessWidget {
               context: context,
               texto: 'Proteínas',
               macrosRecebidos:
-                  value
+                  userProfileProvider
                       .authProvider
                       .authModel
                       ?.authUserModel
@@ -53,7 +52,7 @@ class ColumnMacros extends StatelessWidget {
               context: context,
               texto: 'Gorduras',
               macrosRecebidos:
-                  value
+                  userProfileProvider
                       .authProvider
                       .authModel
                       ?.authUserModel

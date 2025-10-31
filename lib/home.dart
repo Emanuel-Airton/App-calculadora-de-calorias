@@ -28,41 +28,32 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    debugPrint('test');
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      lerRefeicao();
-
-      final provider2 = Provider.of<AuthProvider>(context, listen: false);
-      debugPrint(
-        'calorias consumidas pelo usuario: ${provider2.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
-      );
+      lerRefeicoesCache();
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       context.read<CaloriasProvider>().setCaloriasConsumidas(
-        caloriasConsumidas: provider2
+        caloriasConsumidas: authProvider
             .authModel
             ?.authUserModel
             ?.caloriasModel
             ?.caloriasConsumidas,
-        caloriasTotais:
-            provider2.authModel?.authUserModel?.caloriasModel?.caloriasTotais,
+        caloriasTotais: authProvider
+            .authModel
+            ?.authUserModel
+            ?.caloriasModel
+            ?.caloriasTotais,
       );
-      debugPrint(
-        'calorias provider: ${context.read<CaloriasProvider>().caloriasConsumidas.toString()}',
-      );
-      debugPrint(
-        'calorias provider: ${context.read<CaloriasProvider>().caloriasTotais.toString()}',
-      );
-      await context.read<CaloriasProvider>().calcularPorcentagem();
     });
   }
 
-  lerRefeicao() {
+  void lerRefeicoesCache() {
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
     chatProvider.obterRefeicoesCache();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider2 = Provider.of<AuthProvider>(context, listen: true);
+    final authProvider = Provider.of<AuthProvider>(context, listen: true);
 
     return Scaffold(
       body: Stack(
@@ -98,7 +89,7 @@ class _HomeState extends State<Home> {
                                 title: 'Fazer logout',
                                 type: QuickAlertType.confirm,
                                 onConfirmBtnTap: () async {
-                                  await provider2.signOut();
+                                  await authProvider.signOut();
                                   Navigator.pop(context);
                                   Navigator.pushReplacement(
                                     context,
@@ -117,16 +108,17 @@ class _HomeState extends State<Home> {
                           icon: Icon(Icons.logout),
                         ),
                         Text(
-                          'Olá, ${provider2.authModel?.userName}',
+                          'Olá, ${authProvider.authModel?.userName}',
                           style: TextStyle(
                             color: Colors.grey[700],
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         CircleAvatar(
-                          backgroundImage: provider2.authModel?.photoUrl != null
+                          backgroundImage:
+                              authProvider.authModel?.photoUrl != null
                               ? NetworkImage(
-                                  provider2.authModel!.photoUrl.toString(),
+                                  authProvider.authModel!.photoUrl.toString(),
                                 )
                               : AssetImage('assets/images/user.png')
                                     as ImageProvider,

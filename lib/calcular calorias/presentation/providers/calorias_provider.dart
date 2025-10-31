@@ -159,6 +159,7 @@ class CaloriasProvider extends ChangeNotifier {
   }) {
     _caloriasConsumidas = caloriasConsumidas!;
     _caloriasTotais = caloriasTotais ?? _caloriasTotais;
+    calcularPorcentagem();
     notifyListeners();
   }
 
@@ -266,11 +267,13 @@ class CaloriasProvider extends ChangeNotifier {
     isCalculate = true;
     notifyListeners();
     debugPrint(_caloriasTotais.toString());
-    final calcular = ((_caloriasConsumidas / _caloriasTotais!) * 100)
-        .roundToDouble();
-    _porcentagem = calcular / 100;
-    isCalculate = false;
-    notifyListeners();
+    if (_caloriasTotais != null) {
+      final calcular = ((_caloriasConsumidas / _caloriasTotais!) * 100)
+          .roundToDouble();
+      _porcentagem = calcular / 100;
+      isCalculate = false;
+      notifyListeners();
+    }
   }
 
   void calcularMacros({required AuthUserModel authUserModel}) {

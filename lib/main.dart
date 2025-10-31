@@ -10,6 +10,8 @@ import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.da
 import 'package:app_calorias_diarias/chat/domain/models/refeicao_model.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/splashScreen.dart';
+import 'package:app_calorias_diarias/verificar%20dia/data/repositories/verifica_dia_repository.dart';
+import 'package:app_calorias_diarias/verificar%20dia/data/services/verifica_dia_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +72,12 @@ void main() async {
               ChatProvider(chatRepository: context.read<ChatRepository>()),
           update: (context, chatRep, chatProvider) =>
               chatProvider ?? ChatProvider(chatRepository: chatRep),
+        ),
+
+        Provider<VerificaDiaService>(create: (_) => VerificaDiaService()),
+        Provider<VerificaDiaRepository>(
+          create: (context) =>
+              VerificaDiaRepository(context.read<VerificaDiaService>()),
         ),
       ],
       child: MyApp(),

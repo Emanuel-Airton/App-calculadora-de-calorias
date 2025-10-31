@@ -1,33 +1,34 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/data/repositories/chat_repositorie.dart';
-import 'package:app_calorias_diarias/chat/data/services/plano_alimentar_service.dart';
-import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class CheckboxRefeicoes extends StatefulWidget {
-  String? item;
+  String? nomeRefeicaoSelecionada;
   final calorias;
   bool? valor;
-  CheckboxRefeicoes({super.key, this.item, this.valor, this.calorias});
+  CheckboxRefeicoes({
+    super.key,
+    this.nomeRefeicaoSelecionada,
+    this.valor,
+    this.calorias,
+  });
 
   @override
   State<CheckboxRefeicoes> createState() => _CheckboxRefeicoesState();
 }
 
 class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
-  //late bool _isChecked;
-
   @override
   void initState() {
     super.initState();
     final provider = Provider.of<CaloriasProvider>(context, listen: false);
-    provider.refeicoesSelecionadas[widget.item!] = widget.valor!;
-    //_isChecked = widget.valor!;
+
+    provider.refeicoesSelecionadas[widget.nomeRefeicaoSelecionada!] =
+        widget.valor!;
   }
 
   @override
@@ -39,14 +40,12 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
     return SizedBox(
       child: Card(
         elevation: 6,
-        // margin: EdgeInsets.only(left: 5.0),
-        // color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Row(
             children: [
               Text(
-                widget.item!,
+                widget.nomeRefeicaoSelecionada!,
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.grey[500],
@@ -54,25 +53,27 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
                 ),
               ),
               Consumer<CaloriasProvider>(
-                builder: (context, provider, child) {
+                builder: (context, caloriasProvider, child) {
                   //provider.refeicoesSelecionadas[widget.item!] = widget.valor!;
                   return Checkbox(
                     side: BorderSide(
                       width: 3,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    value: provider.refeicoesSelecionadas[widget.item] ?? false,
+                    value:
+                        caloriasProvider.refeicoesSelecionadas[widget
+                            .nomeRefeicaoSelecionada] ??
+                        false,
 
-                    //provider.refeicoesSelecionadas[widget.item] ?? false,
                     activeColor: Theme.of(context).colorScheme.inversePrimary,
                     onChanged: (bool? value) {
-                      /*setState(() {
-                        _isChecked = value!;
-                      });*/
-                      provider.alternarRefeicao(
-                        nomeRefeicao: widget.item!,
+                      debugPrint(widget.calorias.runtimeType.toString());
+                      caloriasProvider.alternarRefeicao(
+                        nomeRefeicao: widget.nomeRefeicaoSelecionada!,
                         iselect: value!,
-                        calorias: widget.calorias,
+                        calorias: widget.calorias.runtimeType == double
+                            ? widget.calorias.round()
+                            : widget.calorias,
                         caloriasTotais: userProfileProvider
                             .authProvider
                             .authModel!
@@ -82,32 +83,15 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
                       );
 
                       userProfileProvider.updateProfile(
-                        caloriasConsumidas: provider.caloriasConsumidas,
+                        caloriasConsumidas: caloriasProvider.caloriasConsumidas,
                       );
                       context.read<ChatRepository>().atualizarPlano(
-                        nomeRefeicao: widget.item!,
+                        nomeRefeicao: widget.nomeRefeicaoSelecionada!,
                         valor: value,
                       );
 
-                      debugPrint(
-                        'calorias consumidas do usuario: ${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
-                      );
-                      debugPrint(
-                        'calorias consumidas: ${provider.caloriasModel?.caloriasConsumidas.toString()}',
-                      );
-
-                      /* debugPrint(
-                        'calorias consumidas: ${provider.caloriasModel?.caloriasConsumidas.toString()}',
-                      );
-                      debugPrint(
-                        'calorias consumidas do usuario: ${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
-                      );
-                      debugPrint(
-                        'calorias totais: ${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()}',
-                      );*/
-
-                      if (provider.caloriasModel?.caloriasTotais ==
-                          provider.caloriasModel?.caloriasConsumidas) {
+                      if (caloriasProvider.caloriasModel?.caloriasTotais ==
+                          caloriasProvider.caloriasModel?.caloriasConsumidas) {
                         Future.delayed(Duration(milliseconds: 700)).then((
                           value,
                         ) {
@@ -131,12 +115,6 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
                           );
                         });
                       }
-
-                      /*if (_isChecked) {
-                        provider.calcularCaloriasConsumidas(widget.calorias);
-                      } else {
-                        provider.removerCaloriasConsumidas(widget.calorias);
-                      }*/
                     },
                   );
                 },
