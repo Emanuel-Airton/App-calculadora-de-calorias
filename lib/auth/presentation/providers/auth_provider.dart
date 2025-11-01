@@ -18,20 +18,21 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider.listen({GoogleAuthService? googleAuth})
     : _googleAuthService = googleAuth ?? GoogleAuthService() {
-    _listen();
+    listen();
   }
+  Stream<User?> get authStream => _googleAuthService.listenAuth();
 
-  void _listen() {
-    _authSubscription = _googleAuthService.listenAuth().listen((event) {
+  void listen() {
+    _authSubscription = authStream.listen((event) {
       //  _user = event;
       _authModel = AuthModel(
         photoUrl: event?.photoURL,
         userEmail: event?.email,
         userName: event?.displayName,
       );
-      //debugPrint('teste: ${_authUserModel?.userName}');
+
       notifyListeners();
-    }, onError: (error) {});
+    });
   }
 
   Future<void> signInWithGoogle() async {
@@ -45,6 +46,11 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _googleAuthService.signOut();
+    _authModel?.photoUrl = null;
+    _authModel?.userEmail = null;
+    _authModel?.userName = null;
+    _authModel?.userId = null;
+    notifyListeners();
   }
 
   @override

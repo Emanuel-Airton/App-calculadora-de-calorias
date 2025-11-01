@@ -31,6 +31,10 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       lerRefeicoesCache();
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      context.read<UserProfileProvider>().updateFromAuth(
+        context.read<AuthProvider>(),
+      );
+      context.read<UserProfileProvider>().lerAuth();
       context.read<CaloriasProvider>().setCaloriasConsumidas(
         caloriasConsumidas: authProvider
             .authModel

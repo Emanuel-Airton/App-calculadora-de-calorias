@@ -92,13 +92,13 @@ class _SplashscreenState extends State<Splashscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider3 = Provider.of<AuthProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return Material(
       color: Theme.of(context).colorScheme.inversePrimary,
       child: FutureBuilder(
         future: Future.delayed(
           Duration(seconds: 3),
-        ).then((value) => provider3.authModel),
+        ).then((value) => authProvider.authModel),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

@@ -308,20 +308,6 @@ class _CalcularCaloriasViewState extends State<CalcularCaloriasView> {
                           TouglebuttonObjetivo(),
                           SizedBox(height: 15),
                           ButtonCalcularCalorias(formkey: _key),
-                          ElevatedButton(
-                            onPressed: () async {
-                              context
-                                  .read<CaloriasProvider>()
-                                  .setCaloriasConsumidas(caloriasConsumidas: 0);
-                              await context
-                                  .read<ChatProvider>()
-                                  .resetarRefeicoes();
-                              context.read<UserProfileProvider>().updateProfile(
-                                caloriasConsumidas: 0,
-                              );
-                            },
-                            child: Text('resetar refeições'),
-                          ),
                         ],
                       ),
                     ),
