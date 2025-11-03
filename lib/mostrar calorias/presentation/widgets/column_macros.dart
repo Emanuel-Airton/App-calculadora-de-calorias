@@ -65,7 +65,15 @@ class ColumnMacros extends StatelessWidget {
             sizedbox(
               context: context,
               texto: 'Consumo de agua',
-              macrosRecebidos: '2.5 litros',
+              macrosRecebidos:
+                  userProfileProvider
+                      .authProvider
+                      .authModel
+                      ?.authUserModel
+                      ?.macronutrientesDiarios
+                      ?.consumoAgua
+                      .toString() ??
+                  '--',
               assetImage: 'assets/images/water.png',
             ),
           ],

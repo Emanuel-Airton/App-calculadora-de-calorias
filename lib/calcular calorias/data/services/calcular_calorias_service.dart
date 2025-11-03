@@ -56,10 +56,12 @@ class CalcularCaloriasService {
       }
 
       double calorias = tmb * fatorAtividade;
-
+      //debugPrint('calorias calculadas: ${calorias.toString()}');
       if (authUserModel.objetivo == 'Emagrecer') {
         return Result.ok(((calorias * 0.8) / 100).round() * 100); // Reduz 20%
       } else if (authUserModel.objetivo == 'Ganhar massa') {
+        final cal = ((calorias * 1.2) / 100).round() * 100;
+        // debugPrint(cal.toString());
         return Result.ok(((calorias * 1.2) / 100).round() * 100); // Aumenta 20%
       } else {
         return Result.ok(calorias.round()); // Manter peso
@@ -79,6 +81,7 @@ class CalcularCaloriasService {
         proteinas = authUserModel.peso! * 2.0;
         carboidratos = (calorias * 0.35) / 4; // 1g de carb = 4kcal
         gorduras = (calorias * 0.25) / 9; // 1g de gordura = 9kcal
+
         break;
       case 'Ganhar massa':
         proteinas = authUserModel.peso! * 2.0;
@@ -90,12 +93,34 @@ class CalcularCaloriasService {
         carboidratos = (calorias * 0.45) / 4;
         gorduras = (calorias * 0.30) / 9;
     }
-
-    return MacronutrientesModel.froJson(
+    final consumoAgua = calcularConsumoAgua(authUserModel);
+    return MacronutrientesModel.fromJson(
       carboidratos: carboidratos,
       proteinas: proteinas,
       gorduras: gorduras,
       calorias: calorias,
+      consumoAgua: consumoAgua,
     );
+  }
+
+  double calcularConsumoAgua(AuthUserModel authUserModel) {
+    final double consumoAgua;
+    switch (authUserModel.nivelAtividade) {
+      case 'Sedentário':
+      case 'Levemente ativo':
+        consumoAgua = authUserModel.peso! * 35;
+        break;
+      case 'Moderadamente ativo':
+        consumoAgua = (authUserModel.peso! * 40) / 1000;
+        debugPrint('consumo de agua: ${consumoAgua.toString()}');
+        break;
+      case 'Muito ativo':
+      case 'Extremamente ativo':
+        consumoAgua = authUserModel.peso! * 45;
+        break;
+      default:
+        consumoAgua = authUserModel.peso! * 35;
+    }
+    return consumoAgua;
   }
 }

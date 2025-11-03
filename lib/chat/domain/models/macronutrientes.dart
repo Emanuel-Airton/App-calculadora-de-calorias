@@ -12,8 +12,10 @@ class MacronutrientesModel {
   @HiveField(3)
   int? calorias;
   @HiveField(4)
-  List<String>? listFontesCarboidratos;
+  double? consumoAgua;
   @HiveField(5)
+  List<String>? listFontesCarboidratos;
+  @HiveField(6)
   List<String>? listFontesProteinas;
 
   MacronutrientesModel({
@@ -21,6 +23,7 @@ class MacronutrientesModel {
     this.proteinas,
     this.gorduras,
     this.calorias,
+    this.consumoAgua,
   });
 
   Map<String, dynamic> toMap(String objetivo) {
@@ -83,20 +86,22 @@ class MacronutrientesModel {
         """;
   }
 */
-  factory MacronutrientesModel.froJson({
+  factory MacronutrientesModel.fromJson({
     required double carboidratos,
     required double proteinas,
     required double gorduras,
     required int calorias,
+    required double consumoAgua,
   }) {
     return MacronutrientesModel(
       carboidratos: carboidratos,
       proteinas: proteinas,
       gorduras: gorduras,
       calorias: calorias,
+      consumoAgua: consumoAgua,
     );
   }
-  factory MacronutrientesModel.froMap({required Map readMap}) {
+  factory MacronutrientesModel.fromMap({required Map readMap}) {
     return MacronutrientesModel(
       carboidratos: readMap['carboidratos'],
       proteinas: readMap['proteinas'],
@@ -110,6 +115,7 @@ class MacronutrientesModel {
       'proteinas': proteinas,
       'gorduras': gorduras,
       'calorias': calorias,
+      'agua': consumoAgua,
     };
   }
 }
@@ -118,7 +124,7 @@ class MacronutrientesModelAdapter extends TypeAdapter<MacronutrientesModel> {
   @override
   MacronutrientesModel read(BinaryReader reader) {
     // TODO: implement read
-    return MacronutrientesModel.froMap(readMap: reader.readMap());
+    return MacronutrientesModel.fromMap(readMap: reader.readMap());
   }
 
   @override

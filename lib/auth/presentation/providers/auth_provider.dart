@@ -30,7 +30,6 @@ class AuthProvider extends ChangeNotifier {
         userEmail: event?.email,
         userName: event?.displayName,
       );
-
       notifyListeners();
     });
   }
