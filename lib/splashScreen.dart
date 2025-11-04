@@ -1,4 +1,5 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';

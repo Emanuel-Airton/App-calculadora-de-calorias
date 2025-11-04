@@ -109,6 +109,9 @@ class UserProfileProvider extends ChangeNotifier {
   void salvarAuth() {
     //authProvider._authUserModel?.toJson();
     authLocalSourceService.salvar(_authProvider.authModel!.authUserModel!);
+    debugPrint(
+      'consumo de agua 1: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
+    );
     notifyListeners();
   }
 
@@ -120,7 +123,9 @@ class UserProfileProvider extends ChangeNotifier {
       authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas
           .toString(),
     );
-    debugPrint(authProvider.authModel?.toJson().toString());
+    debugPrint(
+      'consumo de agua 2: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
+    );
 
     //await authLocalSourceService.remover();
     notifyListeners();

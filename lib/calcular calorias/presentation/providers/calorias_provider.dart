@@ -157,7 +157,7 @@ class CaloriasProvider extends ChangeNotifier {
     required int? caloriasConsumidas,
     int? caloriasTotais,
   }) {
-    _caloriasConsumidas = caloriasConsumidas!;
+    _caloriasConsumidas = caloriasConsumidas ?? _caloriasConsumidas;
     _caloriasTotais = caloriasTotais ?? _caloriasTotais;
     calcularPorcentagem();
     notifyListeners();

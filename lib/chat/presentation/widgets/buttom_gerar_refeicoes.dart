@@ -1,4 +1,4 @@
-import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/widgets/alertDialog_gerar_refeicao.dart';
 import 'package:flutter/material.dart';

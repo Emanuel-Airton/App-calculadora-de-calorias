@@ -11,6 +11,7 @@ class MacronutrientesModel {
   double? gorduras;
   @HiveField(3)
   int? calorias;
+  //o campo consumoAgua foi adicionado posteriormente
   @HiveField(4)
   double? consumoAgua;
   @HiveField(5)
@@ -54,38 +55,6 @@ class MacronutrientesModel {
         """;
   }
 
-  /*
-  String toMap(String objetivo) {
-    return ''' 
-        - Objetivo: $objetivo
-        - Proteinas totais: ${proteinas} g
-        - Carboidratos totais: ${carboidratos} g
-        - Gorduras totais: ${gorduras} g
-        -Calorias totais: ${calorias} Kcal 
-    ''';
-  }
-
-  Map<String, dynamic> toMapCarboEProteinas() {
-    debugPrint(listFontesProteinas?.first.toString());
-    return {
-      'Preferencias de carboidratos': listFontesCarboidratos ?? 'qualquer tipo',
-      'Preferencias de proteinas': listFontesProteinas ?? 'qualquer tipo',
-    };
-  }
-
-  String messagePrompt(String objetivo) {
-    return """
-        Crie um plano bem elaborado com 5 refeições diárias contendo EXATAMENTE os seguintes dados:
-        ${toMap(objetivo)} e baseado nessas preferencias informadas: ${toMapCarboEProteinas()}
-        REGRAS CRÍTICAS:
-        1. Distribua os macronutrientes proporcionalmente entre as 5 refeições
-        2. A SOMA EXATA de todos os macros deve bater 100% dos valores especificados
-        3. A SOMA EXTA de calorias de todas refeições DEVE ser EXARAMENTE igual a $calorias calorias
-        5. Priorize refeições balanceadas (proteína + carboidrato + gordura).
-        CALCULE CADA REFEIÇÃO COM PRECISÃO MATEMÁTICA ANTES DE RESPONDER.
-        """;
-  }
-*/
   factory MacronutrientesModel.fromJson({
     required double carboidratos,
     required double proteinas,
@@ -107,6 +76,7 @@ class MacronutrientesModel {
       proteinas: readMap['proteinas'],
       gorduras: readMap['gorduras'],
       calorias: readMap['calorias'],
+      consumoAgua: readMap['consumoAgua'],
     );
   }
   Map<String, dynamic> toJson() {
@@ -115,7 +85,7 @@ class MacronutrientesModel {
       'proteinas': proteinas,
       'gorduras': gorduras,
       'calorias': calorias,
-      'agua': consumoAgua,
+      'consumoAgua': consumoAgua,
     };
   }
 }

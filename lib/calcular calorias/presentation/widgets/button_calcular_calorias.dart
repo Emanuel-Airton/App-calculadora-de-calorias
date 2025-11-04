@@ -1,4 +1,5 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/utils/result.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class ButtonCalcularCalorias extends StatelessWidget {
             );
             if (result is Ok) {
               debugPrint(
-                'Valor calculado? ${caloriasProvider.isCalculate.toString()}',
+                'Valor calculado? ${caloriasProvider.macronutrientesModel?.toJson().toString()}',
               );
               _mostrarResultadoDialog(
                 context,

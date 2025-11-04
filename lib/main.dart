@@ -1,5 +1,6 @@
 import 'package:app_calorias_diarias/auth/domain/models/auth_user_model.dart';
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/domain/models/calorias_model.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/data/repositories/chat_repositorie.dart';
@@ -16,7 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
