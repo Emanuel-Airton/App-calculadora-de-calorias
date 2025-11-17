@@ -5,7 +5,6 @@ import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/car
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/checkbox_refeicoes.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/column_macros.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class MostrarCaloriasView extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.da
 import 'package:flutter/widgets.dart';
 
 class ChatProvider extends ChangeNotifier {
-  ChatRepository _chatRepository;
+  final ChatRepository _chatRepository;
   Future<PlanoAlimentar?>? _valorCache;
   Future<PlanoAlimentar?>? get valorCache => _valorCache;
 
@@ -45,7 +45,6 @@ class ChatProvider extends ChangeNotifier {
 
   void gerarRefeicoes(MacronutrientesModel macroNutrientes, String objetivo) {
     _accumulatedResponse = null;
-
     _currentStream = null;
     _respostaFinalizada = false;
     _carregando = true;
@@ -64,9 +63,6 @@ class ChatProvider extends ChangeNotifier {
 
               // Tenta parsear o JSON completo a cada novo chunk
               try {
-                debugPrint(
-                  'Plano atual  ${_planoAtual?.listRefeicao?[0].toString()}',
-                );
                 _carregando = true;
 
                 sink.add(data);
@@ -81,30 +77,31 @@ class ChatProvider extends ChangeNotifier {
               notifyListeners();
             },
             handleError: (error, stackTrace, sink) {
-              //  debugPrint('erro: ${error.toString()}');
               _exception = error is Exception
                   ? error
                   : Exception(error.toString());
               _carregando = true;
               _respostaFinalizada = false;
-
-              // _exception = Exception('erro ao gerar refeições');
               debugPrint('exceção: ${exception.toString()}');
               sink.addError(error);
+              //_carregando = false;
+              sink.close();
               notifyListeners();
             },
             handleDone: (sink) {
               sink.close();
 
-              //  _carregando = false;
               if (_planoAtual != null) {
                 _respostaFinalizada = true;
+                _carregando = false;
+                obterRefeicoesCache(plano: _planoAtual);
                 debugPrint(
-                  'resposta acumulada ${_planoAtual!.listRefeicao!.first.toString()}',
+                  'resposta acumulada ${_planoAtual!.listRefeicao!.first.nomeRefeicao.toString()}',
                 );
               }
-              debugPrint('exceção 2: ${exception.toString()}');
+
               _exception = null;
+
               notifyListeners();
             },
           ),
@@ -136,8 +133,43 @@ class ChatProvider extends ChangeNotifier {
         valor: valor,
       );
       // Recarrega o plano atualizado
-      await lerRefeicaoCache();
+      await obterRefeicoesCache();
     }
+  }
+
+  Future<void> obterRefeicoesCache({PlanoAlimentar? plano}) async {
+    if (_carregando) {
+      debugPrint(_carregando.toString());
+      return;
+    }
+    _carregando = true;
+    try {
+      // if (_valorCache != null) return;
+      if (plano != null) {
+        debugPrint('plano atualizado');
+        _valorCache = Future.delayed(
+          Duration(milliseconds: 500),
+        ).then((value) => plano);
+
+        notifyListeners();
+      } else {
+        _valorCache = _chatRepository.lerRefeicoesCache();
+        notifyListeners();
+      }
+      //_carregando = false;
+      debugPrint('cache: $_valorCache');
+    } catch (e) {
+      debugPrint('Erro ao carregar cache: $e');
+    } finally {
+      _carregando = false;
+      notifyListeners();
+    }
+    // notifyListeners();
+    //  return _valorCache;
+  }
+
+  Future<void> limparCache() async {
+    await _chatRepository.limparCache();
   }
 
   Future<void> resetarRefeicoes() async {
@@ -208,29 +240,6 @@ class ChatProvider extends ChangeNotifier {
       rethrow;
     }
   }*/
-
-  void obterRefeicoesCache() async {
-    if (_carregando) return;
-    _carregando = true;
-    try {
-      // if (_valorCache != null) return;
-      _valorCache = _chatRepository.lerRefeicoesCache();
-      //_carregando = false;
-      debugPrint('cache: $_valorCache');
-    } catch (e) {
-      debugPrint('Erro ao carregar cache: $e');
-    } finally {
-      _carregando = false;
-      notifyListeners();
-    }
-
-    // notifyListeners();
-    //  return _valorCache;
-  }
-
-  Future<void> limparCache() async {
-    await _chatRepository.limparCache();
-  }
 }
 /*
 class ChatProvider extends ChangeNotifier {

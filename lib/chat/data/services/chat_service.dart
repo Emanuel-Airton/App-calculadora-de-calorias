@@ -62,7 +62,7 @@ class ChatService {
     try {
       final request = http.Request(
         'POST',
-        Uri.parse("https://openrouter.ai/api/v1/chat/completions"),
+        Uri.parse("https://openrouter.ai/api/v1/chat/completions0"),
       );
       request.headers.addAll({"Authorization": 'Bearer $apiKey  '});
       request.body = jsonEncode({
