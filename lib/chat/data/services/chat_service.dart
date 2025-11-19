@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:app_calorias_diarias/chat/domain/models/macronutrientes.dart';
-import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:app_calorias_diarias/env/env.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class ChatService {
   static DateTime? lastRequestTime;
-  Stream<PlanoAlimentar?> retryrequestApi(
+  /* Stream<PlanoAlimentar?> retryrequestApi(
     MacronutrientesModel chatModel,
     String objetivo,
   ) async* {
@@ -25,7 +24,7 @@ class ChatService {
       }
     }
     throw Exception("Falha após $retries tentativas devido a rate-limit");
-  }
+  }*/
 
   int? verificarTempoUltimaRequisicao() {
     const Duration minInterval = Duration(seconds: 10);
@@ -34,17 +33,15 @@ class ChatService {
       if (timeSinceLastRequest < minInterval) {
         final waitTime = minInterval - timeSinceLastRequest;
         debugPrint(
-          '⏳ Aguardando ${waitTime.inMinutes} minutos para próxima requisição...',
+          '⏳ Aguardando ${waitTime.inSeconds} minutos para próxima requisição...',
         );
-        return waitTime.inMinutes;
+        return waitTime.inSeconds;
       } else {
         lastRequestTime = DateTime.now();
-
         return null;
       }
     } else {
       lastRequestTime = DateTime.now();
-
       return null;
     }
   }
@@ -62,11 +59,11 @@ class ChatService {
     try {
       final request = http.Request(
         'POST',
-        Uri.parse("https://openrouter.ai/api/v1/chat/completions0"),
+        Uri.parse("https://openrouter.ai/api/v1/chat/completions"),
       );
       request.headers.addAll({"Authorization": 'Bearer $apiKey  '});
       request.body = jsonEncode({
-        'model': 'deepseek/deepseek-chat-v3.1:free',
+        'model': 'meituan/longcat-flash-chat:free',
         "messages": [
           {
             "role": "system",
@@ -84,7 +81,7 @@ class ChatService {
       if (response.statusCode == 200) {
         //debugPrint(response.statusCode.toString());
         await for (var chunk in response.stream.transform(utf8.decoder)) {
-          final lines = chunk.split('\n');
+          List<String> lines = chunk.split('\n');
 
           for (var line in lines) {
             if (line.startsWith('data: ') && line != 'data: [DONE]') {
@@ -97,7 +94,6 @@ class ChatService {
                       .trim(),
                 );
                 final content = jsonData['choices'][0]['delta']['content'];
-
                 if (content != null) {
                   yield content;
                 }

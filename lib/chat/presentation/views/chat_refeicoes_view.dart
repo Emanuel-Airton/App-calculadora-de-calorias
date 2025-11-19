@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/widgets/buttom_gerar_refeicoes.dart';
@@ -50,6 +52,7 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                   Consumer<ChatProvider>(
                     builder: (context, provider, child) {
                       debugPrint('reload ChatProvider');
+
                       return Expanded(
                         child:
                             provider.carregando == false &&
@@ -183,10 +186,17 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                                     case ConnectionState.active:
                                       if (snapshot.hasData) {
                                         debugPrint('hasdata');
+
                                         // Dados sendo recebidos - você pode mostrar um loading com preview
                                         WidgetsBinding.instance.addPostFrameCallback((
                                           timeStamp,
                                         ) {
+                                          context
+                                              .read<UserProfileProvider>()
+                                              .resetCaloriasConsumidas();
+                                          context
+                                              .read<CaloriasProvider>()
+                                              .resetarProcentagem();
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(

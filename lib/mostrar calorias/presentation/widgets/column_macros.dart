@@ -29,6 +29,7 @@ class ColumnMacros extends StatelessWidget {
               /*     value.authUserModel?.macronutrientesDiarios?.carboidratos
                       .toString() ??*/
               //  '--',
+              unidadeMedida: 'g',
               assetImage: 'assets/images/carbs.png',
             ),
 
@@ -46,6 +47,7 @@ class ColumnMacros extends StatelessWidget {
                   /*   value.authUserModel?.macronutrientesDiarios?.proteinas
                       .toString() ??*/
                   '--',
+              unidadeMedida: 'g',
               assetImage: 'assets/images/protein.png',
             ),
             sizedbox(
@@ -60,6 +62,7 @@ class ColumnMacros extends StatelessWidget {
                       ?.gorduras
                       .toString() ??
                   '--',
+              unidadeMedida: 'g',
               assetImage: 'assets/images/fat.png',
             ),
             sizedbox(
@@ -74,6 +77,7 @@ class ColumnMacros extends StatelessWidget {
                       ?.consumoAgua
                       .toString() ??
                   '--',
+              unidadeMedida: 'litros',
               assetImage: 'assets/images/water.png',
             ),
           ],
@@ -87,6 +91,7 @@ Widget sizedbox({
   required BuildContext context,
   required String texto,
   required String macrosRecebidos,
+  required String unidadeMedida,
   required String assetImage,
 }) {
   return SizedBox(
@@ -130,13 +135,26 @@ Widget sizedbox({
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Center(
-                  child: Text(
-                    macrosRecebidos,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Colors.grey,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        macrosRecebidos,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        unidadeMedida,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

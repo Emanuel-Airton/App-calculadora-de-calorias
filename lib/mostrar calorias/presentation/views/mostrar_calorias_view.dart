@@ -1,5 +1,3 @@
-import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
-import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/card_info_calorias.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/checkbox_refeicoes.dart';

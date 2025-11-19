@@ -88,13 +88,14 @@ class ChatProvider extends ChangeNotifier {
               sink.close();
               notifyListeners();
             },
-            handleDone: (sink) {
+            handleDone: (sink) async {
               sink.close();
 
               if (_planoAtual != null) {
                 _respostaFinalizada = true;
                 _carregando = false;
                 obterRefeicoesCache(plano: _planoAtual);
+                await resetarRefeicoes();
                 debugPrint(
                   'resposta acumulada ${_planoAtual!.listRefeicao!.first.nomeRefeicao.toString()}',
                 );

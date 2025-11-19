@@ -1,6 +1,5 @@
 import 'package:app_calorias_diarias/chat/domain/models/refeicao_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CardInfoRefeicoes extends StatelessWidget {
   RefeicaoModel? refeicao;
@@ -43,7 +42,7 @@ class CardInfoRefeicoes extends StatelessWidget {
 
             // Alimentos
             Text(
-              '🍽️ Alimentos:',
+              'Alimentos:',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[700],
@@ -72,7 +71,7 @@ class CardInfoRefeicoes extends StatelessWidget {
 
             // Macros
             Text(
-              '📊 Macronutrientes:',
+              'Macronutrientes:',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[700],
@@ -107,7 +106,10 @@ class CardInfoRefeicoes extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
+          ),
         ),
         Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],

@@ -126,8 +126,13 @@ class UserProfileProvider extends ChangeNotifier {
     debugPrint(
       'consumo de agua 2: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
     );
-
     //await authLocalSourceService.remover();
+    notifyListeners();
+  }
+
+  void resetCaloriasConsumidas() {
+    authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas =
+        0;
     notifyListeners();
   }
 }

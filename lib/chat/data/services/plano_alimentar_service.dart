@@ -37,9 +37,9 @@ class PlanoAlimentarService {
     if (plano?.listRefeicao != null) {
       for (var element in plano!.listRefeicao!) {
         element.refeicaoFeita = false;
-        debugPrint('refeiçoes resetadas');
+        // debugPrint('refeiçoes resetadas');
 
-        debugPrint(element.toMap().toString());
+        //  debugPrint(element.toMap().toString());
         plano.save();
       }
     }

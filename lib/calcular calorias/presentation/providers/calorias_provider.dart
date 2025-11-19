@@ -276,6 +276,12 @@ class CaloriasProvider extends ChangeNotifier {
     }
   }
 
+  resetarProcentagem() {
+    _caloriasConsumidas = 0;
+    _porcentagem = 0;
+    notifyListeners();
+  }
+
   void calcularMacros({required AuthUserModel authUserModel}) {
     _macronutrientesModel = _calcularCaloriasService.calcularMacros(
       calorias: _caloriasTotais!,
