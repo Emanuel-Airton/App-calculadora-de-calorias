@@ -84,19 +84,76 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.inversePrimary.withOpacity(0.2),
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: const Offset(0, 8),
+                                blurRadius: 20,
+                                spreadRadius: -5,
+                              ),
+                            ],
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey.shade300,
+                                Colors.grey.shade200,
+                                Colors.grey.shade100,
+                                Colors.grey.shade50,
+                              ],
+                            ),
                           ),
+
                           child: Column(
                             children: [
-                              Text(
-                                'Taxa metabólica Basal',
-
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Taxa metabólica Basal',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              'Taxa metabólica Basal',
+                                            ),
+                                            content: Text(
+                                              style: TextStyle(
+                                                color: Colors.grey[700],
+                                              ),
+                                              'A taxa metabólica basal (TMB) é a quantidade mínima de energia (calorias) que o seu corpo precisa para manter as funções vitais enquanto você está em completo repouso físico e mental, em jejum e em ambiente com temperatura neutra.\n Em outras palavras, é o gasto de energia necessário para manter você vivo — respiração, circulação sanguínea, temperatura corporal, funcionamento dos órgãos, atividade celular, etc.',
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                      child: Text(
+                                        '?',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               Text(
                                 userProfileProvider
@@ -109,9 +166,11 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                                     ? '--'
                                     : '${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.taxaMetabolismoBasal} Kcal',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.inversePrimary,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -121,24 +180,79 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
 
                         Container(
                           height: constraints.maxHeight * 0.27,
-                          width: constraints.maxWidth * 0.38,
+                          width: constraints.maxWidth * 0.45,
 
                           padding: EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.inversePrimary.withOpacity(0.2),
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: const Offset(0, 8),
+                                blurRadius: 20,
+                                spreadRadius: -5,
+                              ),
+                            ],
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.grey.shade300,
+                                Colors.grey.shade200,
+                                Colors.grey.shade100,
+                                Colors.grey.shade50,
+                              ],
+                            ),
                           ),
                           child: Column(
                             children: [
-                              Text(
-                                'Calorias diárias',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                  fontSize: 18,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Calorias diárias',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text('Calorias diárias'),
+                                            content: Text(
+                                              style: TextStyle(
+                                                color: Colors.grey[700],
+                                              ),
+                                              'Esse valor é referente a quantidade de calorias que você deve ingerir em um único dia, de acordo com o calculo feito para seu objetivo especifico (Emagrecer ou ganhar massa muscular).',
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                      child: Text(
+                                        '?',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               Text(
                                 userProfileProvider
@@ -151,9 +265,11 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                                     ? '--'
                                     : '${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.inversePrimary,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -169,7 +285,7 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           provider.porcentagem != null
-                              ? Text('${provider.porcentagem}%')
+                              ? Text('${provider.porcentagem! * 100}%')
                               : Text((0.0).toString()),
                           Text(
                             'Calorias consumidas',

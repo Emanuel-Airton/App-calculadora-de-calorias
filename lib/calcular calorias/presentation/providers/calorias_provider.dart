@@ -189,14 +189,15 @@ class CaloriasProvider extends ChangeNotifier {
     switch (result) {
       case Ok<int?>():
         _valorTMB = result.value;
-        debugPrint(
+        /*debugPrint(
           'nivel de atifidade fisica: ${userData.nivelAtividade.toString()}',
-        );
-        debugPrint('taxaMetabolismoBasal: ${_valorTMB.toString()}');
+        );*/
+        // debugPrint('taxaMetabolismoBasal: ${_valorTMB.toString()}');
         if (_valorTMB != null) calcularCalorias(userData);
 
       case Error<int?>():
-      // Tratar erro
+        // Tratar erro
+        throw result.exception;
     }
 
     isCalculate = false;

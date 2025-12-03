@@ -79,9 +79,12 @@ class _HomepageState extends State<MostrarCaloriasView> {
                         case ConnectionState.none:
                           return Container();
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(),
+                          );
                         case ConnectionState.active:
-                          return Center(child: CircularProgressIndicator());
                         case ConnectionState.done:
                           if (snapshot.hasError) {
                             return Center(child: Text('Erro'));
@@ -89,18 +92,14 @@ class _HomepageState extends State<MostrarCaloriasView> {
                           if (snapshot.hasData) {
                             final data = snapshot.data?.listRefeicao;
                             if (data != null) {
-                              List<int> list = [];
+                              //  List<int> list = [];
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.length,
                                 itemBuilder: (context, index) {
                                   final item =
                                       snapshot.data?.listRefeicao?[index];
-                                  debugPrint('testando');
-                                  // debugPrint(item?.refeicaoFeita.toString());
-
-                                  //if (map.isEmpty) {
-
+                                  // debugPrint('testando');
                                   map.addAll({
                                     index:
                                         //valor,

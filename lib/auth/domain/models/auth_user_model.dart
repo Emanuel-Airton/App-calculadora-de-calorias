@@ -15,7 +15,7 @@ class AuthModel {
     this.photoUrl,
     this.userId,
     AuthUserModel? authUserModel,
-  }) : authUserModel = authUserModel ?? AuthUserModel.dados3();
+  }) : authUserModel = authUserModel ?? AuthUserModel.dadosCompletos();
 
   factory AuthModel.fromJson(
     String? userName,
@@ -77,7 +77,7 @@ class AuthUserModel extends HiveObject {
     this.objetivo,
   });
 
-  AuthUserModel.dados3({
+  AuthUserModel.dadosCompletos({
     this.genero,
     this.peso,
     this.altura,
@@ -88,7 +88,7 @@ class AuthUserModel extends HiveObject {
     this.caloriasModel,
   });
   factory AuthUserModel.fromMap({Map? readMap}) {
-    return AuthUserModel.dados3(
+    return AuthUserModel.dadosCompletos(
       genero: readMap?['genero'],
       peso: readMap?['peso'],
       altura: readMap?['altura'],

@@ -1,15 +1,13 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
-import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/views/calcular_calorias_view.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
 import 'package:app_calorias_diarias/chat/presentation/views/chat_refeicoes_view.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/views/mostrar_calorias_view.dart';
+import 'package:app_calorias_diarias/perfil/presentation/views/perfil_usuario_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,7 +21,8 @@ class _HomeState extends State<Home> {
   final List<Widget> listaTelas = [
     MostrarCaloriasView(), //2
     CalcularCaloriasView(), //0
-    ChatRefeicoesView(), //1
+    ChatRefeicoesView(),
+    PerfilUsuarioView(), //1
   ];
   @override
   void initState() {
@@ -86,32 +85,6 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          onPressed: () async {
-                            try {
-                              QuickAlert.show(
-                                context: context,
-                                title: 'Fazer logout',
-                                type: QuickAlertType.confirm,
-                                onConfirmBtnTap: () async {
-                                  await authProvider.signOut();
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Authview(),
-                                    ),
-                                  );
-                                },
-                                onCancelBtnTap: () => Navigator.pop(context),
-                                text: 'Deseja remover usuario?',
-                              );
-                            } catch (e) {
-                              debugPrint('erro: $e');
-                            }
-                          },
-                          icon: Icon(Icons.logout),
-                        ),
                         Text(
                           'Olá, ${authProvider.authModel?.userName}',
                           style: TextStyle(
@@ -140,6 +113,7 @@ class _HomeState extends State<Home> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.grey[200],
         currentIndex: indiceAtual,
@@ -161,12 +135,17 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
             tooltip: 'calcular',
-            label: 'Calcular calorias',
+            label: 'Calorias',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),
             tooltip: 'info',
             label: 'Refeições',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            tooltip: 'perfil',
+            label: 'Perfil',
           ),
         ],
       ),

@@ -97,7 +97,10 @@ class MyApp extends StatelessWidget {
         buttonTheme: ButtonThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xA7FFEB01)),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.tealAccent),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.tealAccent,
+          primaryContainer: Colors.grey[200],
+        ),
       ),
       home: Splashscreen(),
     );

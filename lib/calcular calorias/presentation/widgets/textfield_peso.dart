@@ -1,6 +1,4 @@
-import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
-import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +55,7 @@ class _TextFieldPesoState extends State<TextFieldPeso> {
           context,
           listen: false,
         );*/
-        controller.mask = controller.text.length == 2 ? '00.0' : '000.0';
+        //controller.mask = controller.text.length == 2 ? '00.0' : '000.0';
         final provider = context.read<UserProfileProvider>();
         if (value.isNotEmpty) {
           //  provider.peso = double.tryParse(value) ?? 0;
