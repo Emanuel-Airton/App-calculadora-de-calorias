@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:app_calorias_diarias/chat/data/services/chat_cache_service.dart';
 import 'package:app_calorias_diarias/chat/data/services/chat_service.dart';
 import 'package:app_calorias_diarias/chat/data/services/plano_alimentar_service.dart';
 import 'package:app_calorias_diarias/chat/domain/models/macronutrientes.dart';

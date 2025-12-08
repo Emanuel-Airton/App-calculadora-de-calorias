@@ -49,6 +49,8 @@ class _SplashscreenState extends State<Splashscreen> {
     if (isMesmoDia) {
       debugPrint('dia atual é o mesmo dia salvo');
     } else {
+      debugPrint('dia atual é diferente do dia salvo');
+
       limparDadosDiarios();
       diaRepo.salvarDiaAtual();
     }

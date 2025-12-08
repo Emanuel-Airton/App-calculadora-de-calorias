@@ -24,11 +24,14 @@ class GoogleAuthService {
       );
 
       await _auth.signInWithCredential(credentials);
+      debugPrint('currentUser id: ${_auth.currentUser?.uid.toString()}');
+      debugPrint('currentUser email: ${_auth.currentUser?.email.toString()}');
+
       AuthModel authUserModel = AuthModel.fromJson(
-        _auth.currentUser?.displayName,
-        _auth.currentUser?.email,
-        _auth.currentUser?.photoURL,
-        _auth.currentUser?.uid,
+        userName: _auth.currentUser?.displayName,
+        userEmail: _auth.currentUser?.email,
+        photoUrl: _auth.currentUser?.photoURL,
+        userId: _auth.currentUser?.uid,
       );
       //debugPrint(authUserModel.toJson().toString());
       return authUserModel;

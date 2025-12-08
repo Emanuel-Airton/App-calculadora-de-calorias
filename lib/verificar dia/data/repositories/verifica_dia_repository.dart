@@ -1,7 +1,7 @@
 import 'package:app_calorias_diarias/verificar%20dia/data/services/verifica_dia_service.dart';
 
 class VerificaDiaRepository {
-  VerificaDiaService _verificaDiaService;
+  final VerificaDiaService _verificaDiaService;
   VerificaDiaRepository(this._verificaDiaService);
   static const String _keyDiaAtual = 'dia_atual';
 

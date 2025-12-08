@@ -113,7 +113,10 @@ class ChatProvider extends ChangeNotifier {
 
   void clearException() {
     _exception = null;
-    _carregando = false;
+    debugPrint('exceção: ${_exception.toString()}');
+    // _carregando = false;
+    _currentStream = null;
+
     notifyListeners();
   }
 

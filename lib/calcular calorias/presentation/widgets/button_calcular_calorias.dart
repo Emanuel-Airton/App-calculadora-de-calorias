@@ -1,5 +1,6 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
+import 'package:app_calorias_diarias/calcular%20calorias/presentation/widgets/alertDialog_mostrar_resultado.dart';
 import 'package:app_calorias_diarias/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,10 @@ class ButtonCalcularCalorias extends StatelessWidget {
           context,
           listen: false,
         );
-
-        final caloriasProvider = context.read<CaloriasProvider>();
+        final caloriasProvider = Provider.of<CaloriasProvider>(
+          context,
+          listen: false,
+        );
         if (formkey.currentState!.validate()) {
           if (userProfileprovider.hasCompleteProfile) {
             final Result result = await caloriasProvider.calcularTMB(
@@ -66,10 +69,13 @@ class ButtonCalcularCalorias extends StatelessWidget {
               debugPrint(
                 'Valor calculado? ${caloriasProvider.macronutrientesModel?.toJson().toString()}',
               );
-              _mostrarResultadoDialog(
-                context,
-                caloriasProvider.caloriasModel?.caloriasTotais ?? 0,
+              showDialog(
+                context: context,
+                builder: (context) => AlertdialogMostrarResultado(
+                  calorias: caloriasProvider.caloriasModel?.caloriasTotais ?? 0,
+                ),
               );
+
               userProfileprovider
                       .authProvider
                       .authModel
@@ -98,49 +104,17 @@ class ButtonCalcularCalorias extends StatelessWidget {
           }
         }
       },
-      child: const Text('Calcular calorias'),
-      /*child: provider.isCalculate
-              ? const Center(child: CircularProgressIndicator())
-              : const Text('Calcular calorias'),*/
+      // child: const Text('Calcular calorias'),
+      child: Consumer<CaloriasProvider>(
+        builder: (context, value, child) {
+          debugPrint(value.isCalculate.toString());
+          return value.isCalculate
+              ? CircularProgressIndicator()
+              : Text('Calcular calorias');
+        },
+      ),
     );
     // },
     //  );
-  }
-
-  void _mostrarResultadoDialog(BuildContext context, int calorias) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Calorias calculadas'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Sua necessidade calórica diária é:\n',
-                style: const TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                '${calorias.toStringAsFixed(0)} calorias',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Fechar'),
-            ),
-          ],
-        );
-      },
-    );
   }
 }

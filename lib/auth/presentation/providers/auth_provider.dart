@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:app_calorias_diarias/auth/data/services/auth_local_source.dart';
 import 'package:app_calorias_diarias/auth/data/services/google_auth_service.dart';
 import 'package:app_calorias_diarias/auth/domain/models/auth_user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class AuthProvider extends ChangeNotifier {
   final GoogleAuthService _googleAuthService;
@@ -29,6 +27,7 @@ class AuthProvider extends ChangeNotifier {
         photoUrl: event?.photoURL,
         userEmail: event?.email,
         userName: event?.displayName,
+        userId: event?.uid,
       );
       notifyListeners();
     });

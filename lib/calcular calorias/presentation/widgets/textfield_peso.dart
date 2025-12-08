@@ -51,11 +51,6 @@ class _TextFieldPesoState extends State<TextFieldPeso> {
       },
       controller: controller,
       onChanged: (value) {
-        /*   final provider = Provider.of<UserProfileProvider>(
-          context,
-          listen: false,
-        );*/
-        //controller.mask = controller.text.length == 2 ? '00.0' : '000.0';
         final provider = context.read<UserProfileProvider>();
         if (value.isNotEmpty) {
           //  provider.peso = double.tryParse(value) ?? 0;

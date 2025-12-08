@@ -272,9 +272,9 @@ class CaloriasProvider extends ChangeNotifier {
       final calcular = ((_caloriasConsumidas / _caloriasTotais!) * 100)
           .roundToDouble();
       _porcentagem = calcular / 100;
-      isCalculate = false;
-      notifyListeners();
     }
+    isCalculate = false;
+    notifyListeners();
   }
 
   resetarProcentagem() {

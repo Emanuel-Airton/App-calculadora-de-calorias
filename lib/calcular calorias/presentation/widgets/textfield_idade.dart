@@ -63,7 +63,6 @@ class _TextFormFieldIdadeState extends State<TextFormFieldIdade> {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(15),
         ),
-        suffixText: 'Anos',
       ),
     );
   }

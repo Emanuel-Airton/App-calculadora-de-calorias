@@ -1,3 +1,4 @@
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/views/authView.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -147,6 +148,9 @@ class _PerfilUsuarioViewState extends State<PerfilUsuarioView> {
                                                 context
                                                     .read<AuthProvider>()
                                                     .signOut();
+                                                context
+                                                    .read<UserProfileProvider>()
+                                                    .closeBox();
 
                                                 Navigator.pop(context);
                                                 Navigator.pushReplacement(

@@ -1,5 +1,4 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
-import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/views/calcular_calorias_view.dart';
 import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
@@ -31,10 +30,12 @@ class _HomeState extends State<Home> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       lerRefeicoesCache();
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      context.read<UserProfileProvider>().updateFromAuth(
+
+      /* context.read<UserProfileProvider>().updateFromAuth(
         context.read<AuthProvider>(),
       );
-      context.read<UserProfileProvider>().lerAuth();
+      context.read<UserProfileProvider>().lerAuth();*/
+
       context.read<CaloriasProvider>().setCaloriasConsumidas(
         caloriasConsumidas: authProvider
             .authModel
@@ -57,6 +58,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('reload homePage');
     final authProvider = Provider.of<AuthProvider>(context, listen: true);
 
     return Scaffold(

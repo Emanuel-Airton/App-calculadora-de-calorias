@@ -1,5 +1,6 @@
 import 'package:app_calorias_diarias/calcular%20calorias/domain/models/calorias_model.dart';
 import 'package:app_calorias_diarias/chat/domain/models/macronutrientes.dart';
+import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:hive/hive.dart';
 
 class AuthModel {
@@ -17,12 +18,12 @@ class AuthModel {
     AuthUserModel? authUserModel,
   }) : authUserModel = authUserModel ?? AuthUserModel.dadosCompletos();
 
-  factory AuthModel.fromJson(
-    String? userName,
-    String? userEmail,
+  factory AuthModel.fromJson({
+    required String? userName,
+    required String? userEmail,
     String? photoUrl,
-    String? userId,
-  ) {
+    required String? userId,
+  }) {
     return AuthModel(
       userName: userName,
       userEmail: userEmail,
@@ -68,6 +69,9 @@ class AuthUserModel extends HiveObject {
   @HiveField(7)
   CaloriasModel? caloriasModel;
 
+  @HiveField(8)
+  PlanoAlimentar? planoAlimentar;
+
   AuthUserModel.dados({
     this.genero,
     this.peso,
@@ -86,6 +90,7 @@ class AuthUserModel extends HiveObject {
     this.objetivo,
     this.macronutrientesDiarios,
     this.caloriasModel,
+    this.planoAlimentar,
   });
   factory AuthUserModel.fromMap({Map? readMap}) {
     return AuthUserModel.dadosCompletos(
@@ -97,6 +102,7 @@ class AuthUserModel extends HiveObject {
       objetivo: readMap?['objetivo'],
       macronutrientesDiarios: readMap?['macronutrientesDiarios'],
       caloriasModel: readMap?['caloriasModel'],
+      planoAlimentar: readMap?['planoAlimentar'],
     );
   }
   Map<String, dynamic> toMap() {
@@ -109,6 +115,7 @@ class AuthUserModel extends HiveObject {
       'objetivo': objetivo,
       'macronutrientesDiarios': macronutrientesDiarios,
       'caloriasModel': caloriasModel,
+      'planoAlimentar': planoAlimentar,
     };
   }
 

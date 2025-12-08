@@ -1,6 +1,7 @@
 import 'package:app_calorias_diarias/auth/data/services/auth_local_source.dart';
 import 'package:app_calorias_diarias/auth/domain/models/auth_user_model.dart';
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -31,7 +32,10 @@ class UserProfileProvider extends ChangeNotifier {
            authLocalSource ?? AuthLocalSourceService(Hive.box('userProfile')) {
     lerAuth();
     //_authProvider.authModel?.userEmail = 'novoEmail';
-    debugPrint('email ${_authProvider.authModel?.userEmail.toString()}');
+    debugPrint(
+      'email do usuario ${_authProvider.authModel?.userEmail.toString()}',
+    );
+    debugPrint('id do usuario ${_authProvider.authModel?.userId.toString()}');
   }
 
   void updateFromAuth(AuthProvider newAuthProvider) {
@@ -52,7 +56,6 @@ class UserProfileProvider extends ChangeNotifier {
   }) {
     //   _authProvider._authModel?.authUserModel ??= AuthUserModel.dados();
     // final authUserModel = _authProvider._authModel!.authUserModel!;
-
     _authProvider.authModel?.authUserModel?.genero =
         genero ?? _authProvider.authModel?.authUserModel?.genero;
     _authProvider.authModel?.authUserModel?.peso =
@@ -79,6 +82,7 @@ class UserProfileProvider extends ChangeNotifier {
     if (caloriasConsumidas != null) {
       debugPrint('Contém calorias');
       authLocalSourceService.atualizarCaloriasPlano(
+        userId: _authProvider.authModel!.userId!,
         caloriasConsumidas: caloriasConsumidas,
       );
     }
@@ -108,7 +112,7 @@ class UserProfileProvider extends ChangeNotifier {
 
   void salvarAuth() {
     //authProvider._authUserModel?.toJson();
-    authLocalSourceService.salvar(_authProvider.authModel!.authUserModel!);
+    authLocalSourceService.salvar(_authProvider.authModel!);
     debugPrint(
       'consumo de agua 1: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
     );
@@ -116,18 +120,33 @@ class UserProfileProvider extends ChangeNotifier {
   }
 
   Future<void> lerAuth() async {
+    debugPrint('UserId: ${authProvider.authModel?.userId}');
     authProvider.authModel?.authUserModel =
-        authLocalSourceService.obterPlano() ??
+        await authLocalSourceService.obterPlano(
+          authProvider.authModel!.userId!,
+        ) ??
         authProvider.authModel!.authUserModel;
-    debugPrint(
+    /* debugPrint(
       authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas
           .toString(),
     );
     debugPrint(
       'consumo de agua 2: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
-    );
+    );*/
     //await authLocalSourceService.remover();
     notifyListeners();
+  }
+
+  Future<void> adicionarPlanoAlimentar(PlanoAlimentar planoAlimetar) async {
+    await authLocalSourceService.adicionarPlanoAlimentar(
+      authProvider.authModel!.userId!,
+      planoAlimetar,
+    );
+    notifyListeners();
+  }
+
+  Future<void> closeBox() async {
+    await authLocalSourceService.fecharCaixa();
   }
 
   void resetCaloriasConsumidas() {

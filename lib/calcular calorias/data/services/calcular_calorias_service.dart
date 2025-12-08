@@ -121,6 +121,6 @@ class CalcularCaloriasService {
       default:
         consumoAgua = authUserModel.peso! * 35;
     }
-    return consumoAgua;
+    return consumoAgua.roundToDouble();
   }
 }

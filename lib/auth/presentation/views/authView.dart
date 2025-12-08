@@ -1,4 +1,5 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/auth_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/auth/presentation/widgets/alerts/quickAlert_error.dart';
 import 'package:app_calorias_diarias/auth/presentation/widgets/alerts/quickAlert_sucess.dart';
 import 'package:app_calorias_diarias/auth/presentation/widgets/buttons/auth_button.dart';
@@ -34,6 +35,10 @@ class _AuthviewState extends State<Authview> {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => Splashscreen()),
                   );
+                  context.read<UserProfileProvider>().updateFromAuth(
+                    context.read<AuthProvider>(),
+                  );
+                  context.read<UserProfileProvider>().lerAuth();
                 });
 
                 // Text('Latest number: ${snapshot.data}'); // Display the data

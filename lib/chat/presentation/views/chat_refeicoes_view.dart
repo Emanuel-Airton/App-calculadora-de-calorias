@@ -104,8 +104,10 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                             : StreamBuilder<PlanoAlimentar>(
                                 stream: provider.currentStream,
                                 builder: (context, snapshot) {
-                                  if (snapshot.hasError) {
-                                    debugPrint('hasError');
+                                  debugPrint('rodando novamente');
+
+                                  if (provider.exception != null) {
+                                    debugPrint('hasError ${snapshot.error}');
                                     // Usa um Future.microtask para evitar problemas de contexto
                                     Future.microtask(
                                       () => showDialog(
@@ -149,8 +151,8 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.pop(context);
                                                 provider.clearException();
+                                                Navigator.pop(context);
                                               },
                                               child: Text(
                                                 'Ok, fechar',
