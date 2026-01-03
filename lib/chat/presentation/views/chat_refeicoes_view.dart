@@ -49,14 +49,21 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Consumer<ChatProvider>(
+                  Consumer<UserProfileProvider>(
                     builder: (context, provider, child) {
                       debugPrint('reload ChatProvider');
 
                       return Expanded(
                         child:
-                            provider.carregando == false &&
-                                provider.planoAtual != null
+                            // provider.carregando == false &&
+                            provider
+                                    .authProvider
+                                    .authModel
+                                    ?.authUserModel
+                                    ?.planoAlimentar !=
+                                null
+                            //  provider.carregando == false &&
+                            //      provider.planoAtual != null
                             ? Container(
                                 height: MediaQuery.sizeOf(context).height * 0.8,
                                 decoration: BoxDecoration(
@@ -69,15 +76,29 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                                     Expanded(
                                       child: ListView.builder(
                                         itemCount:
-                                            provider
+                                            /* provider
                                                 .planoAtual
+                                                ?.listRefeicao
+                                                ?.length ??
+                                            0,*/
+                                            provider
+                                                .authProvider
+                                                .authModel
+                                                ?.authUserModel
+                                                ?.planoAlimentar
                                                 ?.listRefeicao
                                                 ?.length ??
                                             0,
                                         itemBuilder: (context, index) {
                                           debugPrint('plano alimentar');
-                                          final refeicao = provider
+                                          /*  final refeicao = provider
                                               .planoAtual
+                                              ?.listRefeicao?[index];*/
+                                          final refeicao = provider
+                                              .authProvider
+                                              .authModel
+                                              ?.authUserModel
+                                              ?.planoAlimentar
                                               ?.listRefeicao?[index];
                                           return AnimatedOpacity(
                                             opacity: 1.0,
@@ -101,105 +122,21 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                                   ],
                                 ),
                               )
-                            : StreamBuilder<PlanoAlimentar>(
-                                stream: provider.currentStream,
-                                builder: (context, snapshot) {
-                                  debugPrint('rodando novamente');
+                            : Consumer<ChatProvider>(
+                                builder: (context, value, child) {
+                                  return StreamBuilder<PlanoAlimentar>(
+                                    stream: value.currentStream,
+                                    builder: (context, snapshot) {
+                                      debugPrint('rodando novamente');
 
-                                  if (provider.exception != null) {
-                                    debugPrint('hasError ${snapshot.error}');
-                                    // Usa um Future.microtask para evitar problemas de contexto
-                                    Future.microtask(
-                                      () => showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.error,
-                                                color: Colors.red,
-                                                size: 48,
-                                              ),
-                                              SizedBox(height: 16),
-                                              Column(
-                                                children: [
-                                                  Text(
-                                                    'Erro ao gerar novo plano!',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      color: Colors.grey[600],
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  Text(
-                                                    'Tente novamente mais tarde',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey[600],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                provider.clearException();
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'Ok, fechar',
-                                                style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                    // provider.clearException();
-                                  }
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.waiting:
-                                      debugPrint('waiting');
-
-                                      return Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            LinearProgressIndicator(),
-                                            SizedBox(height: 16),
-                                            Text(
-                                              'Gerando seu plano alimentar...',
-                                            ),
-                                          ],
-                                        ),
-                                      );
-
-                                    case ConnectionState.active:
-                                      if (snapshot.hasData) {
-                                        debugPrint('hasdata');
-
-                                        // Dados sendo recebidos - você pode mostrar um loading com preview
-                                        WidgetsBinding.instance.addPostFrameCallback((
-                                          timeStamp,
-                                        ) {
-                                          context
-                                              .read<UserProfileProvider>()
-                                              .resetCaloriasConsumidas();
-                                          context
-                                              .read<CaloriasProvider>()
-                                              .resetarProcentagem();
-                                          showDialog(
+                                      if (value.exception != null) {
+                                        debugPrint(
+                                          'hasError ${snapshot.error}',
+                                        );
+                                        // Usa um Future.microtask para evitar problemas de contexto
+                                        Future.microtask(
+                                          () => showDialog(
+                                            barrierDismissible: false,
                                             context: context,
                                             builder: (context) => AlertDialog(
                                               content: Column(
@@ -208,44 +145,148 @@ class _AlertdialogRefeicoesState extends State<ChatRefeicoesView> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(
-                                                    Icons.check_circle,
-                                                    color: Colors.green,
+                                                    Icons.error,
+                                                    color: Colors.red,
                                                     size: 48,
                                                   ),
                                                   SizedBox(height: 16),
-                                                  Text(
-                                                    'Plano alimentar gerado com sucesso!',
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        'Erro ao gerar novo plano!',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          color:
+                                                              Colors.grey[600],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        'Tente novamente mais tarde',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              Colors.grey[600],
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    value.clearException();
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'Ok, fechar',
+                                                    style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                        // provider.clearException();
+                                      }
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          debugPrint('waiting');
+
+                                          return Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                LinearProgressIndicator(),
+                                                SizedBox(height: 16),
+                                                Text(
+                                                  'Gerando seu plano alimentar...',
+                                                ),
+                                              ],
                                             ),
                                           );
-                                        });
-                                      }
-                                      return Center(
-                                        child: CircularProgressIndicator(),
-                                      );
 
-                                    case ConnectionState.done:
-                                      if (snapshot.hasData) {
-                                        debugPrint('done');
+                                        case ConnectionState.active:
+                                          if (snapshot.hasData) {
+                                            debugPrint('hasdata');
 
-                                        Center(child: Text('plano gerado'));
+                                            // Dados sendo recebidos - você pode mostrar um loading com preview
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback((
+                                                  timeStamp,
+                                                ) {
+                                                  context
+                                                      .read<
+                                                        UserProfileProvider
+                                                      >()
+                                                      .resetCaloriasConsumidas();
+                                                  context
+                                                      .read<CaloriasProvider>()
+                                                      .resetarProcentagem();
+                                                  context
+                                                      .read<
+                                                        UserProfileProvider
+                                                      >()
+                                                      .adicionarPlanoAlimentar(
+                                                        snapshot.data!,
+                                                      );
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) => AlertDialog(
+                                                      content: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.check_circle,
+                                                            color: Colors.green,
+                                                            size: 48,
+                                                          ),
+                                                          SizedBox(height: 16),
+                                                          Text(
+                                                            'Plano alimentar gerado com sucesso!',
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                });
+                                          }
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+
+                                        case ConnectionState.done:
+                                          /* if (snapshot.hasData) {
+                                            debugPrint('done');
+
+                                            Center(child: Text('plano gerado'));
+                                          }*/
+                                          return Center(
+                                            child: Text('Gerar seu plano'),
+                                          );
+                                        case ConnectionState.none:
+                                          // TODO: Handle this case.
+                                          return Center(
+                                            child: Text(
+                                              'Plano não gerado',
+                                              style: TextStyle(
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          );
                                       }
-                                      return Center(
-                                        child: Text('Gerar seu plano'),
-                                      );
-                                    case ConnectionState.none:
-                                      // TODO: Handle this case.
-                                      return Center(
-                                        child: Text(
-                                          'Plano não gerado',
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                          ),
-                                        ),
-                                      );
-                                  }
+                                    },
+                                  );
                                 },
                               ),
                       );

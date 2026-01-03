@@ -159,6 +159,7 @@ class CaloriasProvider extends ChangeNotifier {
   }) {
     _caloriasConsumidas = caloriasConsumidas ?? _caloriasConsumidas;
     _caloriasTotais = caloriasTotais ?? _caloriasTotais;
+    debugPrint('calorias consumidas: ${_caloriasConsumidas.toString()}');
     calcularPorcentagem();
     notifyListeners();
   }
@@ -230,21 +231,27 @@ class CaloriasProvider extends ChangeNotifier {
     required bool iselect,
     required int calorias,
     required int caloriasTotais,
+    required int caloriasConsumidas,
   }) {
     refeicoesSelecionadas[nomeRefeicao] = iselect;
     if (iselect) {
-      adicionarCaloriasConsumidas(calorias, caloriasTotais);
+      adicionarCaloriasConsumidas(calorias, caloriasTotais, caloriasConsumidas);
     } else {
-      removerCaloriasConsumidas(calorias, caloriasTotais);
+      removerCaloriasConsumidas(calorias, caloriasTotais, caloriasConsumidas);
     }
     notifyListeners();
   }
 
   // Métodos de consumo de calorias (não dependem do usuário)
-  void adicionarCaloriasConsumidas(int calorias, int caloriasTotais) {
+  void adicionarCaloriasConsumidas(
+    int caloriasRecebidas,
+    int caloriasTotais,
+    int caloriasConsumidas,
+  ) {
     _caloriasTotais = caloriasTotais;
+    _caloriasConsumidas = caloriasConsumidas;
     final currentCalories = _caloriasConsumidas;
-    _caloriasConsumidas = currentCalories + calorias;
+    _caloriasConsumidas = currentCalories + caloriasRecebidas;
     if (_caloriasTotais != null) {
       calcularPorcentagem();
       teste();
@@ -252,8 +259,13 @@ class CaloriasProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removerCaloriasConsumidas(int calorias, int caloriasTotais) {
+  void removerCaloriasConsumidas(
+    int calorias,
+    int caloriasTotais,
+    int caloriasConsumidas,
+  ) {
     _caloriasTotais = caloriasTotais;
+    _caloriasConsumidas = caloriasConsumidas;
     final currentCalories = _caloriasConsumidas;
     _caloriasConsumidas = currentCalories - calorias;
     if (_caloriasTotais != null) {

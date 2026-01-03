@@ -55,7 +55,7 @@ class ChatService {
     final prompt = macros.messagePrompt(objetivo);
     //debugPrint('macros: ${prompt.toString()}');
     //  debugPrint('macros: ${macros.listFontesCarboidratos.toString()}');
-
+    //'model': 'meituan/longcat-flash-chat:free',
     try {
       final request = http.Request(
         'POST',
@@ -63,7 +63,7 @@ class ChatService {
       );
       request.headers.addAll({"Authorization": 'Bearer $apiKey  '});
       request.body = jsonEncode({
-        'model': 'meituan/longcat-flash-chat:free',
+        'model': 'deepseek/deepseek-chat-v3-0324:fre',
         "messages": [
           {
             "role": "system",

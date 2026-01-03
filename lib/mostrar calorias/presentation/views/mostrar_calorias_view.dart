@@ -1,4 +1,5 @@
-import 'package:app_calorias_diarias/chat/presentation/providers/chat_provider.dart';
+import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
+import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/card_info_calorias.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/checkbox_refeicoes.dart';
 import 'package:app_calorias_diarias/mostrar%20calorias/presentation/widgets/column_macros.dart';
@@ -15,12 +16,25 @@ class MostrarCaloriasView extends StatefulWidget {
 class _HomepageState extends State<MostrarCaloriasView> {
   Map<int, bool> map = {};
   bool valor = false;
+  Future<PlanoAlimentar?>? plano;
   @override
   void initState() {
     // TODO: implement initState
 
-    //debugPrint('teste');
+    obterPlano();
+    // debugPrint('teste');
     super.initState();
+  }
+
+  void obterPlano() {
+    plano = Future.delayed(Duration(milliseconds: 500)).then(
+      (value) => context
+          .read<UserProfileProvider>()
+          .authProvider
+          .authModel!
+          .authUserModel!
+          .planoAlimentar!,
+    );
   }
 
   @override
@@ -70,24 +84,22 @@ class _HomepageState extends State<MostrarCaloriasView> {
             child: SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.06,
               width: MediaQuery.sizeOf(context).width * 0.3,
-              child: Consumer<ChatProvider>(
+              child: Consumer<UserProfileProvider>(
                 builder: (context, value, child) {
                   return FutureBuilder(
-                    future: value.valorCache,
+                    future: plano,
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
                           return Container();
                         case ConnectionState.waiting:
-                          return SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: CircularProgressIndicator(),
-                          );
+                          return Center(child: LinearProgressIndicator());
                         case ConnectionState.active:
                         case ConnectionState.done:
                           if (snapshot.hasError) {
-                            return Center(child: Text('Erro'));
+                            return Center(
+                              child: Text('Erro ao carregar dados!'),
+                            );
                           }
                           if (snapshot.hasData) {
                             final data = snapshot.data?.listRefeicao;

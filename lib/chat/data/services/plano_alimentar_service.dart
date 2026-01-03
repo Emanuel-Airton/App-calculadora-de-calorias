@@ -32,7 +32,8 @@ class PlanoAlimentarService {
     }
   }
 
-  Future<void> resetRefeicoesPlano() async {
+  //Limpa a marcação de refeição feita no dia
+  Future<void> resetRefeicoesFeitasPlano() async {
     final plano = obterPlano();
     if (plano?.listRefeicao != null) {
       for (var element in plano!.listRefeicao!) {

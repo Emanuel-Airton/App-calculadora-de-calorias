@@ -60,7 +60,7 @@ class _SplashscreenState extends State<Splashscreen> {
     context.read<CaloriasProvider>().setCaloriasConsumidas(
       caloriasConsumidas: 0,
     );
-    await context.read<ChatProvider>().resetarRefeicoes();
+    await context.read<ChatProvider>().resetarRefeicoesFeitas();
     context.read<UserProfileProvider>().updateProfile(caloriasConsumidas: 0);
   }
 

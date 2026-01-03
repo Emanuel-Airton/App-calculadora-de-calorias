@@ -16,7 +16,7 @@ class AuthLocalSourceService {
     required String userId,
     int? caloriasConsumidas,
   }) async {
-    final authUserModel = await obterPlano(userId);
+    final authUserModel = await obterDadosUsuario(userId);
     authUserModel?.caloriasModel?.caloriasConsumidas = caloriasConsumidas;
     authUserModel?.save();
   }
@@ -25,12 +25,12 @@ class AuthLocalSourceService {
     String userId,
     PlanoAlimentar planoAlimentar,
   ) async {
-    final authUserModel = await obterPlano(userId);
+    final authUserModel = await obterDadosUsuario(userId);
     authUserModel?.planoAlimentar = planoAlimentar;
     authUserModel?.save();
   }
 
-  Future<AuthUserModel?> obterPlano(String userId) async {
+  Future<AuthUserModel?> obterDadosUsuario(String userId) async {
     if (!box.isOpen) {
       box = await Hive.openBox<AuthUserModel>('userProfile');
     }
@@ -40,6 +40,27 @@ class AuthLocalSourceService {
       'teste obtendo dados do usuario: ${authUserModel?.macronutrientesDiarios?.toJson().toString()}',
     );
     return authUserModel;
+  }
+
+  //Atualiza a refeição especifica com o valor passado
+  Future<void> atualizarRefeicaoPlano(
+    String userId,
+    String nomeRefeicao,
+    bool valorSelecionado,
+    double porcentagemConsumida,
+  ) async {
+    final dadosUsuarios = await obterDadosUsuario(userId);
+    dadosUsuarios!.planoAlimentar!.porcentagemConsumida = porcentagemConsumida;
+    for (var element in dadosUsuarios.planoAlimentar!.listRefeicao!) {
+      if (element.nomeRefeicao == nomeRefeicao) {
+        element.refeicaoFeita = valorSelecionado;
+
+        debugPrint('refeição encontrada');
+
+        debugPrint(element.toMap().toString());
+        dadosUsuarios.save();
+      }
+    }
   }
 
   Future<void> remover() async {

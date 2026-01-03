@@ -24,6 +24,7 @@ class UserProfileProvider extends ChangeNotifier {
   int? get idade => _idade;
   String? get nivelAtividade => _nivelAtividade;
   String? get objetivo => _objetivo;
+  Future<PlanoAlimentar?>? plano;
 
   UserProfileProvider(
     this._authProvider, {
@@ -119,21 +120,14 @@ class UserProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //Obtem os dados do usuario salvos na memoria
   Future<void> lerAuth() async {
     debugPrint('UserId: ${authProvider.authModel?.userId}');
     authProvider.authModel?.authUserModel =
-        await authLocalSourceService.obterPlano(
+        await authLocalSourceService.obterDadosUsuario(
           authProvider.authModel!.userId!,
         ) ??
         authProvider.authModel!.authUserModel;
-    /* debugPrint(
-      authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas
-          .toString(),
-    );
-    debugPrint(
-      'consumo de agua 2: ${authProvider.authModel?.authUserModel?.macronutrientesDiarios?.consumoAgua.toString()}',
-    );*/
-    //await authLocalSourceService.remover();
     notifyListeners();
   }
 
@@ -147,6 +141,19 @@ class UserProfileProvider extends ChangeNotifier {
 
   Future<void> closeBox() async {
     await authLocalSourceService.fecharCaixa();
+  }
+
+  Future<void> atualizarRefeicaoPlano(
+    String nomeRefeicao,
+    bool valorSelecionado,
+    double porcentagemCalculada,
+  ) async {
+    await authLocalSourceService.atualizarRefeicaoPlano(
+      authProvider.authModel!.userId!,
+      nomeRefeicao,
+      valorSelecionado,
+      porcentagemCalculada,
+    );
   }
 
   void resetCaloriasConsumidas() {

@@ -1,6 +1,5 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
 import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
-import 'package:app_calorias_diarias/chat/data/repositories/chat_repositorie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -33,10 +32,6 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
 
   @override
   Widget build(BuildContext context) {
-    final userProfileProvider = Provider.of<UserProfileProvider>(
-      context,
-      listen: false,
-    );
     return SizedBox(
       child: Card(
         elevation: 6,
@@ -66,7 +61,12 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
                         false,
 
                     activeColor: Theme.of(context).colorScheme.inversePrimary,
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value) async {
+                      final userProfileProvider =
+                          Provider.of<UserProfileProvider>(
+                            context,
+                            listen: false,
+                          );
                       debugPrint(widget.calorias.runtimeType.toString());
                       caloriasProvider.alternarRefeicao(
                         nomeRefeicao: widget.nomeRefeicaoSelecionada!,
@@ -80,14 +80,22 @@ class _CheckboxRefeicoesState extends State<CheckboxRefeicoes> {
                             .authUserModel!
                             .macronutrientesDiarios!
                             .calorias!,
+                        caloriasConsumidas: userProfileProvider
+                            .authProvider
+                            .authModel!
+                            .authUserModel!
+                            .caloriasModel!
+                            .caloriasConsumidas!,
                       );
 
                       userProfileProvider.updateProfile(
                         caloriasConsumidas: caloriasProvider.caloriasConsumidas,
                       );
-                      context.read<ChatRepository>().atualizarPlano(
-                        nomeRefeicao: widget.nomeRefeicaoSelecionada!,
-                        valor: value,
+
+                      await userProfileProvider.atualizarRefeicaoPlano(
+                        widget.nomeRefeicaoSelecionada!,
+                        value,
+                        caloriasProvider.porcentagem!,
                       );
 
                       if (caloriasProvider.caloriasModel?.caloriasTotais ==

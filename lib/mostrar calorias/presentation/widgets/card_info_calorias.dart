@@ -1,5 +1,4 @@
 import 'package:app_calorias_diarias/auth/presentation/providers/userProfile_provider.dart';
-import 'package:app_calorias_diarias/calcular%20calorias/presentation/providers/calorias_provider.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,19 +14,33 @@ class CardInfoCalorias extends StatefulWidget {
 
 class _CardInfoCaloriasState extends State<CardInfoCalorias> {
   final date = DateTime.now();
+  Future<double>? valor;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     String onlyDay = DateFormat.yMMMEd().format(date);
     debugPrint(onlyDay);
+    debugPrint('testando...');
+    obterPorcentagem();
     //2025-09-10T13:20:12.396339
     //2025-09-10T13:21:00.178900
   }
 
+  obterPorcentagem() {
+    valor = Future.delayed(Duration(milliseconds: 500)).then(
+      (value) => context
+          .read<UserProfileProvider>()
+          .authProvider
+          .authModel!
+          .authUserModel!
+          .planoAlimentar!
+          .porcentagemConsumida!,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CaloriasProvider>(context, listen: true);
     final userProfileProvider = Provider.of<UserProfileProvider>(
       context,
       listen: true,
@@ -277,38 +290,57 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                         ),
                       ],
                     ),
-                    CircularPercentIndicator(
-                      radius: 70.0,
-                      lineWidth: 7.0,
-                      percent: provider.porcentagem ?? 0.0,
-                      center: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          provider.porcentagem != null
-                              ? Text('${provider.porcentagem! * 100}%')
-                              : Text((0.0).toString()),
-                          Text(
-                            'Calorias consumidas',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          Text(
-                            userProfileProvider
-                                        .authProvider
-                                        .authModel
-                                        ?.authUserModel
-                                        ?.macronutrientesDiarios
-                                        ?.calorias ==
-                                    null
-                                ? '--'
-                                : '${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: Colors.grey.shade300,
-                      progressColor: Theme.of(
-                        context,
-                      ).colorScheme.inversePrimary,
+
+                    FutureBuilder(
+                      future: valor,
+                      builder: (context, asyncSnapshot) {
+                        switch (asyncSnapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.waiting:
+                            return CircularProgressIndicator();
+                          case ConnectionState.active:
+                            throw UnimplementedError();
+                          case ConnectionState.done:
+                            final double porcentagem = asyncSnapshot.data!;
+
+                            return CircularPercentIndicator(
+                              radius: 70.0,
+                              lineWidth: 7.0,
+                              percent: asyncSnapshot.data ?? 0.0,
+                              center: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  porcentagem != null
+                                      ? Text(
+                                          '${(porcentagem * 100).toStringAsFixed(1)}%',
+                                        )
+                                      : Text((0.0).toString()),
+                                  Text(
+                                    'Calorias consumidas',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                  Text(
+                                    userProfileProvider
+                                                .authProvider
+                                                .authModel
+                                                ?.authUserModel
+                                                ?.macronutrientesDiarios
+                                                ?.calorias ==
+                                            null
+                                        ? '--'
+                                        : '${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                              backgroundColor: Colors.grey.shade300,
+                              progressColor: Theme.of(
+                                context,
+                              ).colorScheme.inversePrimary,
+                            );
+                        }
+                        return Container();
+                      },
                     ),
                   ],
                 ),

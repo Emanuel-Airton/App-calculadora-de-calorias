@@ -5,8 +5,10 @@ import 'package:hive/hive.dart';
 class PlanoAlimentar extends HiveObject {
   @HiveField(0)
   List<RefeicaoModel>? listRefeicao;
+  @HiveField(1)
+  double? porcentagemConsumida;
 
-  PlanoAlimentar({this.listRefeicao});
+  PlanoAlimentar({this.listRefeicao, this.porcentagemConsumida});
   factory PlanoAlimentar.fromJson(Map<String, dynamic> map) {
     List list = map['plano_alimentar'] as List;
     return PlanoAlimentar(
@@ -21,6 +23,7 @@ class PlanoAlimentar extends HiveObject {
                 .map((e) => RefeicaoModel.fromJson(e))
                 .toList()
           : null,
+      porcentagemConsumida: map['porcentagemConsumida'],
     );
   }
 
@@ -30,6 +33,7 @@ class PlanoAlimentar extends HiveObject {
       'listRefeicao': listRefeicao
           ?.map((refeicao) => refeicao.toMap())
           .toList(),
+      'porcentagemConsumida': porcentagemConsumida,
     };
   }
 }

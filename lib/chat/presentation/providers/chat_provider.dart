@@ -95,7 +95,7 @@ class ChatProvider extends ChangeNotifier {
                 _respostaFinalizada = true;
                 _carregando = false;
                 obterRefeicoesCache(plano: _planoAtual);
-                await resetarRefeicoes();
+                await resetarRefeicoesFeitas();
                 debugPrint(
                   'resposta acumulada ${_planoAtual!.listRefeicao!.first.nomeRefeicao.toString()}',
                 );
@@ -126,10 +126,10 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> atualizarRefeicao({
+  /*Future<void> atualizarRefeicaoFeita({
     required PlanoAlimentar planoAlimentar,
     required String nomeRefeicao,
-    required valor,
+    required bool valor,
   }) async {
     if (_planoAtual != null) {
       await _chatRepository.atualizarPlano(
@@ -139,7 +139,7 @@ class ChatProvider extends ChangeNotifier {
       // Recarrega o plano atualizado
       await obterRefeicoesCache();
     }
-  }
+  }*/
 
   Future<void> obterRefeicoesCache({PlanoAlimentar? plano}) async {
     if (_carregando) {
@@ -176,8 +176,8 @@ class ChatProvider extends ChangeNotifier {
     await _chatRepository.limparCache();
   }
 
-  Future<void> resetarRefeicoes() async {
-    await _chatRepository.resetarRefeicoes();
+  Future<void> resetarRefeicoesFeitas() async {
+    await _chatRepository.resetarRefeicoesFeitas();
     notifyListeners();
   }
 
