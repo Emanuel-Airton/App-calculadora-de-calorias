@@ -181,52 +181,6 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /* void gerarRefeicoes(MacronutrientesModel macroNutrientes, String objetivo) {
-    _accumulatedResponse = ''; // Reseta o acumulador
-    _currentStream = ChatService()
-        .generateMealPlanStream(macroNutrientes, objetivo)
-        .asBroadcastStream()
-        .transform(
-          StreamTransformer<String, PlanoAlimentar>.fromHandlers(
-            handleData: (data, sink) {
-              _accumulatedResponse += data;
-
-              // Tenta parsear o JSON completo a cada novo chunk
-              try {
-                final jsonString = _accumulatedResponse
-                    .replaceAll('```json', '')
-                    .replaceAll('```', '')
-                    .trim();
-
-                if (jsonString.isNotEmpty) {
-                  final jsonMap = json.decode(jsonString);
-                  final plano = PlanoAlimentar.fromJson(jsonMap);
-                  _planoAtual = plano;
-                  sink.add(plano);
-                }
-              } catch (e) {
-                // JSON ainda incompleto - não faz nada, espera mais chunks
-              }
-
-              notifyListeners();
-            },
-            handleError: (error, stackTrace, sink) {
-              sink.addError(error);
-              debugPrint(error.toString());
-
-              notifyListeners();
-            },
-            handleDone: (sink) {
-              sink.close();
-
-              notifyListeners();
-            },
-          ),
-        );
-
-    notifyListeners(); // Notifica que o stream começou
-  }*/
-
   // Limpar stream atual
   void limparStream() {
     _currentStream = null;
@@ -245,33 +199,3 @@ class ChatProvider extends ChangeNotifier {
     }
   }*/
 }
-/*
-class ChatProvider extends ChangeNotifier {
-  ChatRepositorie chatRepositorie;
-  Future<PlanoAlimentar?>? _valorCache;
-  Future<PlanoAlimentar?>? get valorCache => _valorCache;
-  bool _carregando = false;
-  bool? get carregando => _carregando;
-
-  ChatProvider({ChatRepositorie? chatRepositorie})
-    : chatRepositorie = chatRepositorie ?? ChatRepositorie();
-
-  Future<void> gerarRefeicoes(ChatModel chatModel, String objetivo) async {
-    await chatRepositorie.gerarRefeicoes(chatModel, objetivo);
-  }
-
-  Future<PlanoAlimentar?> lerRefeicoesCache() async {
-    _carregando = true;
-    _valorCache = chatRepositorie.lerRefeicoesCache();
-    _carregando = false;
-    debugPrint('cache: ${_valorCache}');
-    notifyListeners();
-    return _valorCache;
-  }
-
-  Future<void> limparCache() async {
-    await chatRepositorie.limparCache();
-  }
-}
-
-*/

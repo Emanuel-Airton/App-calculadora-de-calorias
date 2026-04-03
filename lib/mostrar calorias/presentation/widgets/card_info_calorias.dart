@@ -27,15 +27,17 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
     //2025-09-10T13:21:00.178900
   }
 
-  obterPorcentagem() {
+  void obterPorcentagem() {
     valor = Future.delayed(Duration(milliseconds: 500)).then(
-      (value) => context
-          .read<UserProfileProvider>()
-          .authProvider
-          .authModel!
-          .authUserModel!
-          .planoAlimentar!
-          .porcentagemConsumida!,
+      (value) =>
+          context
+              .read<UserProfileProvider>()
+              .authProvider
+              .authModel
+              ?.authUserModel
+              ?.planoAlimentar
+              ?.porcentagemConsumida ??
+          0.0,
     );
   }
 
@@ -45,10 +47,6 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
       context,
       listen: true,
     );
-
-    /*debugPrint(
-      'lista: ${provider.authUserModel?.macronutrientesDiarios?.listFontesProteinas.toString()}',
-    );*/
     return LayoutBuilder(
       builder: (context, constraints) {
         return Card(
@@ -290,56 +288,57 @@ class _CardInfoCaloriasState extends State<CardInfoCalorias> {
                         ),
                       ],
                     ),
-
-                    FutureBuilder(
-                      future: valor,
-                      builder: (context, asyncSnapshot) {
-                        switch (asyncSnapshot.connectionState) {
-                          case ConnectionState.none:
-                          case ConnectionState.waiting:
-                            return CircularProgressIndicator();
-                          case ConnectionState.active:
-                            throw UnimplementedError();
-                          case ConnectionState.done:
-                            final double porcentagem = asyncSnapshot.data!;
-
-                            return CircularPercentIndicator(
-                              radius: 70.0,
-                              lineWidth: 7.0,
-                              percent: asyncSnapshot.data ?? 0.0,
-                              center: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  porcentagem != null
-                                      ? Text(
-                                          '${(porcentagem * 100).toStringAsFixed(1)}%',
-                                        )
-                                      : Text((0.0).toString()),
-                                  Text(
-                                    'Calorias consumidas',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                  Text(
-                                    userProfileProvider
-                                                .authProvider
-                                                .authModel
-                                                ?.authUserModel
-                                                ?.macronutrientesDiarios
-                                                ?.calorias ==
-                                            null
-                                        ? '--'
-                                        : '${userProfileProvider.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
+                    Consumer<UserProfileProvider>(
+                      builder: (context, value, child) {
+                        return CircularPercentIndicator(
+                          radius: 70.0,
+                          lineWidth: 7.0,
+                          percent:
+                              value
+                                  .authProvider
+                                  .authModel
+                                  ?.authUserModel
+                                  ?.planoAlimentar
+                                  ?.porcentagemConsumida ??
+                              0.0,
+                          center: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                value
+                                            .authProvider
+                                            .authModel
+                                            ?.authUserModel
+                                            ?.planoAlimentar
+                                            ?.porcentagemConsumida !=
+                                        null
+                                    ? '${(value.authProvider.authModel!.authUserModel!.planoAlimentar!.porcentagemConsumida! * 100).toStringAsFixed(1)}%'
+                                    : '',
                               ),
-                              backgroundColor: Colors.grey.shade300,
-                              progressColor: Theme.of(
-                                context,
-                              ).colorScheme.inversePrimary,
-                            );
-                        }
-                        return Container();
+
+                              Text(
+                                'Calorias consumidas',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              Text(
+                                value
+                                            .authProvider
+                                            .authModel
+                                            ?.authUserModel
+                                            ?.macronutrientesDiarios
+                                            ?.calorias ==
+                                        null
+                                    ? '--'
+                                    : '${value.authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}/${userProfileProvider.authProvider.authModel?.authUserModel?.macronutrientesDiarios?.calorias.toString()} Kcal',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.grey.shade300,
+                          progressColor: Theme.of(
+                            context,
+                          ).colorScheme.inversePrimary,
+                        );
                       },
                     ),
                   ],

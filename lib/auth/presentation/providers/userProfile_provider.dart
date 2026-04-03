@@ -54,6 +54,7 @@ class UserProfileProvider extends ChangeNotifier {
     String? nivelAtividade,
     String? objetivo,
     int? caloriasConsumidas,
+    double? porcentagemConsumida,
   }) {
     //   _authProvider._authModel?.authUserModel ??= AuthUserModel.dados();
     // final authUserModel = _authProvider._authModel!.authUserModel!;
@@ -77,9 +78,23 @@ class UserProfileProvider extends ChangeNotifier {
             ?.authUserModel
             ?.caloriasModel
             ?.caloriasConsumidas;
-    debugPrint(
-      'testando ${_authProvider.authModel?.authUserModel?.idade.toString()}',
+    _authProvider
+            .authModel
+            ?.authUserModel
+            ?.planoAlimentar
+            ?.porcentagemConsumida =
+        porcentagemConsumida ??
+        _authProvider
+            .authModel
+            ?.authUserModel
+            ?.planoAlimentar
+            ?.porcentagemConsumida;
+    /*debugPrint(
+      'porcentagemConsumida ${_authProvider.authModel?.authUserModel?.planoAlimentar?.porcentagemConsumida.toString()}',
     );
+    debugPrint(
+      'caloriasConsumidas ${_authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
+    );*/
     if (caloriasConsumidas != null) {
       debugPrint('Contém calorias');
       authLocalSourceService.atualizarCaloriasPlano(
@@ -122,7 +137,7 @@ class UserProfileProvider extends ChangeNotifier {
 
   //Obtem os dados do usuario salvos na memoria
   Future<void> lerAuth() async {
-    debugPrint('UserId: ${authProvider.authModel?.userId}');
+    // debugPrint('UserId: ${authProvider.authModel?.userId}');
     authProvider.authModel?.authUserModel =
         await authLocalSourceService.obterDadosUsuario(
           authProvider.authModel!.userId!,
@@ -160,5 +175,11 @@ class UserProfileProvider extends ChangeNotifier {
     authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas =
         0;
     notifyListeners();
+  }
+
+  Future<void> resetarRefeicoesPlano() async {
+    await authLocalSourceService.resetarRefeicaoPlano(
+      _authProvider.authModel!.userId!,
+    );
   }
 }

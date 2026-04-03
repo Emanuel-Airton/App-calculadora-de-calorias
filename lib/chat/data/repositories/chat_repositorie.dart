@@ -6,44 +6,6 @@ import 'package:app_calorias_diarias/chat/domain/models/plano_alimentar_model.da
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-/*class ChatRepositorie {
-  ChatCacheService cacheService = ChatCacheService();
-  ChatService chatService = ChatService();
-  final chaveCache = 'refeições';
-
-  Future<Map<String, dynamic>?> gerarRefeicoes(
-    ChatModel chatModel,
-    String objetivo,
-  ) async {
-    try {
-      final lerRefeicoes = await lerRefeicoesCache();
-      if (lerRefeicoes != null) return lerRefeicoes;
-      final request = await chatService.requestApi(chatModel, objetivo);
-      await cacheService.salvarCache(chaveCache, request);
-      return jsonDecode(request);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>?> lerRefeicoesCache() async {
-    final lerCache = await cacheService.lerCache(chaveCache);
-
-    if (lerCache != null) {
-      //  debugPrint('valor cache: $lerCache');
-      final map = await jsonDecode(lerCache);
-      debugPrint('valor cache: ${map.toString()}');
-      return jsonDecode(map);
-    }
-    debugPrint('cache vazio: $lerCache');
-    return null;
-  }
-
-  Future<void> limparCache() async {
-    await cacheService.limparCache(chaveCache);
-  }
-}*/
-
 class ChatRepository {
   final PlanoAlimentarService _planoService;
   final ChatService _chatService;

@@ -22,13 +22,7 @@ class ColumnMacros extends StatelessWidget {
                       ?.macronutrientesDiarios
                       ?.carboidratos
                       .toString() ??
-                  /*   value.authUserModel?.macronutrientesDiarios?.proteinas
-                      .toString() ??*/
                   '--',
-
-              /*     value.authUserModel?.macronutrientesDiarios?.carboidratos
-                      .toString() ??*/
-              //  '--',
               unidadeMedida: 'g',
               assetImage: 'assets/images/carbs.png',
             ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,10 +24,16 @@ class VerificaDiaService {
       final prefs = await SharedPreferences.getInstance();
       final savedTimestamp = prefs.getInt(key);
       if (savedTimestamp == null) {
+        debugPrint('nenhum dia salvo');
+
         await salvarDiaAtual(key);
         return true;
       }
       final todayTimestamp = _getDiaTimestamp(DateTime.now());
+      //debugPrint((todayTimestamp == savedTimestamp).toString());
+      debugPrint('dia atual: ${todayTimestamp.toString()}');
+      debugPrint('dia salvo: ${savedTimestamp.toString()}');
+
       return todayTimestamp == savedTimestamp;
     } on PlatformException catch (e) {
       throw Exception('Erro de plataforma ao verificar data $e');

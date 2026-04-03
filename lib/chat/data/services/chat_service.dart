@@ -56,6 +56,7 @@ class ChatService {
     //debugPrint('macros: ${prompt.toString()}');
     //  debugPrint('macros: ${macros.listFontesCarboidratos.toString()}');
     //'model': 'meituan/longcat-flash-chat:free',
+    //  'model': 'deepseek/deepseek-chat-v3-0324:fre',
     try {
       final request = http.Request(
         'POST',
@@ -63,7 +64,7 @@ class ChatService {
       );
       request.headers.addAll({"Authorization": 'Bearer $apiKey  '});
       request.body = jsonEncode({
-        'model': 'deepseek/deepseek-chat-v3-0324:fre',
+        'model': 'xiaomi/mimo-v2-flash',
         "messages": [
           {
             "role": "system",
@@ -111,89 +112,5 @@ class ChatService {
     } finally {
       client.close();
     }
-    // }
-    //  return;
-    //}
-    // _lastRequestTime = DateTime.now();
-
-    /*final response0 = await http.get(
-      Uri.parse("https://openrouter.ai/api/v1/key"),
-      headers: {"Authorization": 'Bearer $apiKey  '},
-    );
-    if (response0.statusCode == 200) {
-      debugPrint(response0.body);
-    }*/
   }
-
-  /*
-  Future<PlanoAlimentar> requestApi(
-    MacronutrientesModel macros,
-    String objetivo,
-  ) async {
-    const apiKey = Env.apiKey;
-    // debugPrint(apiKey);
-    final url = Uri.parse("https://openrouter.ai/api/v1/chat/completions");
-    final prompt = macros.messagePrompt(objetivo);
-    // debugPrint(prompt);
-    /*  final response0 = await http.get(
-      Uri.parse("https://openrouter.ai/api/v1/key"),
-      headers: {"Authorization": 'Bearer $apiKey  '},
-    );
-    if (response0.statusCode == 200) {
-      debugPrint(response0.body);
-    }*/
-    final response = await http
-        .post(
-          url,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $apiKey",
-          },
-
-          body: jsonEncode({
-            "model": "deepseek/deepseek-chat-v3-0324:free",
-            "messages": [
-              {
-                "role": "system",
-                "content":
-                    "Você é um nutricionista especializado em dietas personalizadas. IMPORTANTE: sua resposta DEVE ser SOMENTE um JSON válido, sem comentários, sem markdown, sem ```json, sem texto fora do objeto. FORMATO EXATO:\n\n{\n  \"plano_alimentar\": [\n    {\n      \"refeicao\": \"Nome da Refeição\",\n      \"alimentos\": [\"alimento 1 (quantidade)\", \"alimento 2 (quantidade)\"],\n      \"macros\": {\n        \"proteinas\": 0,\n        \"carboidratos\": 0,\n        \"gorduras\": 0,\n        \"calorias\": 0\n      }\n    }\n  ]\n}",
-              },
-              {"role": "user", "content": prompt},
-            ],
-            "max_tokens": 700,
-            "temperature": 0.7,
-          }),
-        )
-        .timeout(Duration(seconds: 45));
-    if (response.statusCode == 200) {
-      try {
-        String cleanedJson = response.body
-            .replaceAll('```json', '')
-            .replaceAll('```', '')
-            .trim();
-
-        final responseBody = jsonDecode(
-          cleanedJson,
-        )["choices"][0]["message"]["content"];
-        debugPrint('Resposta da API: $responseBody');
-        final jsonData = jsonDecode(responseBody);
-        debugPrint('jsonData: ${jsonData.runtimeType}');
-        PlanoAlimentar planoAlimentar = PlanoAlimentar.fromJson(
-          jsonData, // Note: content já é um JSON string
-        );
-
-        if (planoAlimentar.listRefeicao!.isNotEmpty) {
-          debugPrint(
-            'Plano processado com ${planoAlimentar.listRefeicao!.length} refeições',
-          );
-        }
-        return planoAlimentar;
-      } catch (e) {
-        debugPrint('Erro ao processar resposta da API: $e');
-        rethrow;
-      }
-    } else {
-      throw Exception("Erro ao gerar refeições: ${response.body}");
-    }
-  }*/
 }

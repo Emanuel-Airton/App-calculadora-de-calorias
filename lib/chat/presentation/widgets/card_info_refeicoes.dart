@@ -41,13 +41,13 @@ class CardInfoRefeicoes extends StatelessWidget {
             const SizedBox(height: 10),
 
             // Alimentos
-            Text(
+            /*  Text(
               'Alimentos:',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[700],
               ),
-            ),
+            ),*/
             const SizedBox(height: 5),
             Wrap(
               spacing: 8,
@@ -59,7 +59,7 @@ class CardInfoRefeicoes extends StatelessWidget {
                   color: WidgetStatePropertyAll(
                     Theme.of(
                       context,
-                    ).colorScheme.inversePrimary.withOpacity(0.4),
+                    ).colorScheme.inversePrimary.withOpacity(0.5),
                   ),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
@@ -70,30 +70,43 @@ class CardInfoRefeicoes extends StatelessWidget {
             const SizedBox(height: 10),
 
             // Macros
-            Text(
-              'Macronutrientes:',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
+            Container(
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Theme.of(
+                  context,
+                ).colorScheme.inversePrimary.withOpacity(0.2),
               ),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildMacroChip(
-                  '🥩 Proteína',
-                  '${refeicao?.macros?['proteinas'] ?? 0}g',
-                ),
-                _buildMacroChip(
-                  '🍚 Carboidrato',
-                  '${refeicao?.macros?['carboidratos'] ?? 0}g',
-                ),
-                _buildMacroChip(
-                  '🥑 Gordura',
-                  '${refeicao?.macros?['gorduras'] ?? 0}g',
-                ),
-              ],
+              child: Column(
+                children: [
+                  Text(
+                    'Macronutrientes',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildMacroChip(
+                        '🥩 Proteína',
+                        '${refeicao?.macros?['proteinas'] ?? 0}g',
+                      ),
+                      _buildMacroChip(
+                        '🍚 Carboidrato',
+                        '${refeicao?.macros?['carboidratos'] ?? 0}g',
+                      ),
+                      _buildMacroChip(
+                        '🥑 Gordura',
+                        '${refeicao?.macros?['gorduras'] ?? 0}g',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

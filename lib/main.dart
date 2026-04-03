@@ -49,12 +49,6 @@ void main() async {
 
         ChangeNotifierProvider(create: (context) => CaloriasProvider()),
 
-        //  ChangeNotifierProvider(create: (context) => AuthProvider.listen()),
-        /*   FutureProvider<Box<PlanoAlimentar>?>(
-          create: (_) => Hive.openBox<PlanoAlimentar>('planoAlimentarBox'),
-          initialData: null,
-        ),*/
-
         // Provider do Service
         ProxyProvider(update: (_, box, _) => PlanoAlimentarService()),
 

@@ -98,7 +98,7 @@ class _HomepageState extends State<MostrarCaloriasView> {
                         case ConnectionState.done:
                           if (snapshot.hasError) {
                             return Center(
-                              child: Text('Erro ao carregar dados!'),
+                              //  child: Text('Nenhum dado para mostrar!'),
                             );
                           }
                           if (snapshot.hasData) {

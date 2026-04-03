@@ -23,23 +23,6 @@ class _SplashscreenState extends State<Splashscreen> {
     testarHive();
     super.initState();
     verificarDiaAtual();
-
-    /*debugPrint(
-      'calorias consumidas: ${context.read<UserProfileProvider>().authProvider.authModel?.authUserModel?.caloriasModel?.caloriasConsumidas.toString()}',
-    );
-    //final caloriasProvider = Provider.of<CaloriasProvider>(context, listen: false);
-    context.read<CaloriasProvider>().setCaloriasConsumidas(
-      caloriasConsumidas: context
-          .read<UserProfileProvider>()
-          .authProvider
-          .authModel
-          ?.authUserModel
-          ?.caloriasModel
-          ?.caloriasConsumidas,
-    );
-    debugPrint(
-      'calorias provider: ${context.read<CaloriasProvider>().caloriasConsumidas.toString()}',
-    );*/
   }
 
   Future<void> verificarDiaAtual() async {
@@ -61,7 +44,13 @@ class _SplashscreenState extends State<Splashscreen> {
       caloriasConsumidas: 0,
     );
     await context.read<ChatProvider>().resetarRefeicoesFeitas();
-    context.read<UserProfileProvider>().updateProfile(caloriasConsumidas: 0);
+
+    context.read<UserProfileProvider>().updateProfile(
+      caloriasConsumidas: 0,
+      // porcentagemConsumida: 0.0,
+    );
+
+    context.read<UserProfileProvider>().resetarRefeicoesPlano();
   }
 
   void testarHive() async {

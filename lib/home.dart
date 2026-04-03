@@ -34,12 +34,6 @@ class _HomeState extends State<Home> {
         context,
         listen: false,
       );
-
-      /* context.read<UserProfileProvider>().updateFromAuth(
-        context.read<AuthProvider>(),
-      );
-      context.read<UserProfileProvider>().lerAuth();*/
-
       context.read<CaloriasProvider>().setCaloriasConsumidas(
         caloriasConsumidas: userProfileProvider
             .authProvider
@@ -90,16 +84,21 @@ class _HomeState extends State<Home> {
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Olá, ${authProvider.authModel?.userName}',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'Olá, ${authProvider.authModel?.userName}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
+                        SizedBox(width: 8),
                         CircleAvatar(
                           backgroundImage:
                               authProvider.authModel?.photoUrl != null

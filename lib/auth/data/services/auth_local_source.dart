@@ -63,6 +63,17 @@ class AuthLocalSourceService {
     }
   }
 
+  Future<void> resetarRefeicaoPlano(String userId) async {
+    final dadosUsuarios = await obterDadosUsuario(userId);
+    if (dadosUsuarios?.planoAlimentar?.listRefeicao != null) {
+      for (var dados in dadosUsuarios!.planoAlimentar!.listRefeicao!) {
+        dados.refeicaoFeita = false;
+        dadosUsuarios.planoAlimentar!.porcentagemConsumida = 0.0;
+        dadosUsuarios.save();
+      }
+    }
+  }
+
   Future<void> remover() async {
     await box.delete('user_profile');
 
