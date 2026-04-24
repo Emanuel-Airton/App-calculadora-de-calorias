@@ -15,8 +15,7 @@ saudável já que através das informações individuais calcula a quantidade ne
   </tr>
 </Table>
 
-Além do calculo calórico, o aplicativo também tem a funcionalidade de gerar uma dieta personalizada para o usuario já com a distibuição exata de calorias e 
-divisão de macronutrientes. 
+Além do calculo calórico, o aplicativo também tem a funcionalidade de gerar uma dieta personalizada baseada nas suas preferencias alimentares de fontes de carboidratos e proteinas do o usuario já com a distribuição exata de calorias e divisão de macronutrientes. 
 
 <Table>
   <tr>
