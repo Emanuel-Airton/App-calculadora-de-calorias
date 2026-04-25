@@ -26,3 +26,7 @@ Além do calculo calórico, o aplicativo também tem a funcionalidade de gerar u
     </td>
   </tr>
 </Table>
+
+O aplicativo serve como ferramenta para o usuario acompanhar suas refeições realizadas diariamente e a sua meta de calorias diárias.
+
+<img width="324" height="720" alt="Screenshot_20260423-210544" src="https://github.com/user-attachments/assets/7050fa5d-c630-4e59-ae23-37e4045dc17c" />
